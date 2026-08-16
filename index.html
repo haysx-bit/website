@@ -1,36 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>haysx Projects</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HAYSX — Build Log</title>
+<meta name="description" content="HAYSX build log — cyberdeck project and other experiments.">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Space+Grotesk:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Header with logo + nav -->
-  <header>
-    <img src="logo.png" alt="haysx logo" class="logo">
-    <nav>
-      <ul>
-        <li><a href="website.html">Home</a></li>
-        <li><a href="projects.html">Projects</a></li>
-      </ul>
-    </nav>
-  </header>
 
-  <!-- Main content -->
-  <main>
-    <h1>Projects</h1>
-    <p>Welcome to my build log. Here I’ll document the cyberdeck project and other experiments.</p>
+<canvas id="stars"></canvas>
 
-    <section>
-      <h2>Cyberdeck Build</h2>
-      <ul>
-        <li>Waterproof case</li>
-        <li>Orange Pi 4 Pro</li>
-        <li>Keyboard + joystick</li>
-        <li>Remaining items: screen, HUD, fan, etc.</li>
-      </ul>
-    </section>
-  </main>
+<header>
+  <a href="index.html" class="brand">
+    <img src="logo.png" alt="HAYSX logo" class="logo">
+    <span class="brand-name">HAYSX</span>
+  </a>
+  <nav>
+    <ul>
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="projects.html">Projects</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">HAYSX // BUILD LOG</div>
+
+  <canvas id="haysx" width="634" height="439"></canvas>
+
+  <p class="tagline">documenting things as they get built<span class="cursor"></span></p>
+
+  <h1>Projects, prototypes, and the occasional cyberdeck.</h1>
+  <p class="lede">This is where builds get tracked from parts pile to finished thing — starting with a waterproof-case cyberdeck running on an Orange&nbsp;Pi.</p>
+
+  <a href="projects.html" class="btn">View projects <span class="arrow">→</span></a>
+</section>
+
+<footer>
+  <span>© <span id="year"></span> HAYSX</span>
+  <span>haysx.com</span>
+</footer>
+
+<script src="site.js"></script>
+<script src="logo-animation.js"></script>
 </body>
 </html>
