@@ -1,140 +1,388 @@
-/* Footer year */
-const yearEl = document.getElementById("year");
-if(yearEl) yearEl.textContent = new Date().getFullYear();
+/* =========================================================
+   HAYSX — design tokens
+   ========================================================= */
+:root{
+  --void:       #05070a;
+  --void-2:     #0a0e14;
+  --panel:      #0d1218;
+  --line:       #1b232c;
+  --ice:        #bfe8ff;
+  --ice-dim:    #6fa3c4;
+  --white:      #eef4f8;
+  --grey:       #7c8791;
+  --ok:         #8fd6a8;
+  --pending:    #6b7580;
+
+  --display: "Orbitron", sans-serif;
+  --body:    "Space Grotesk", sans-serif;
+  --mono:    "JetBrains Mono", monospace;
+}
+
+*{ box-sizing: border-box; }
+
+html{ scroll-behavior: smooth; }
+
+body{
+  margin: 0;
+  min-height: 100vh;
+  background: var(--void);
+  color: var(--white);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* subtle radial vignette + logo watermark, bottom right,
+   this is the "background logo" request — kept quiet so it
+   never competes with the hero */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(ellipse at 50% -10%, rgba(191,232,255,.07), transparent 55%);
+  pointer-events: none;
+}
+
+/* single shared canvas: stars + drifting circuit shapes,
+   painted once behind everything so no layer looks pasted on */
+#stars{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+a{ color: inherit; text-decoration: none; }
 
 /* =========================================================
-   Shared ambient background: starfield + slow drifting
-   circuit shapes. One canvas, one scene, so nothing on the
-   page reads as a layer pasted on top of another.
+   HEADER
    ========================================================= */
-(function(){
-  const canvas = document.getElementById("stars");
-  if(!canvas) return;
+header{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 32px;
+  background: rgba(5,7,10,.72);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
 
-  const ctx = canvas.getContext("2d");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-  let stars = [];
-  let shapes = [];
+.logo{
+  height: 34px;
+  width: auto;
+  filter: drop-shadow(0 0 6px rgba(191,232,255,.45));
+}
 
-  function resize(){
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+.brand-name{
+  font-family: var(--display);
+  font-size: 18px;
+  letter-spacing: .12em;
+  color: var(--white);
+}
 
-    const starCount = Math.round((canvas.width * canvas.height) / 9000);
-    stars = Array.from({length: starCount}, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: Math.random() < 0.85 ? Math.random() * 0.7 + 0.3 : 1.1,
-      speed: Math.random() * 0.02 + 0.004,
-      alpha: Math.random() * 0.5 + 0.15,
-      phase: Math.random() * Math.PI * 2
-    }));
+nav ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 28px;
+}
 
-    const shapeCount = Math.max(4, Math.round((canvas.width * canvas.height) / 260000));
-    shapes = Array.from({length: shapeCount}, () => makeShape());
-  }
+nav ul li a{
+  position: relative;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--grey);
+  padding-bottom: 4px;
+  transition: color .2s ease;
+}
 
-  function makeShape(){
-    const types = ["triangle","ring","node"];
-    const type = types[Math.floor(Math.random() * types.length)];
-    return {
-      type,
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      size: Math.random() * 90 + 50,
-      rot: Math.random() * Math.PI * 2,
-      rotSpeed: (Math.random() - 0.5) * 0.00012,
-      dx: (Math.random() - 0.5) * 0.010,
-      dy: (Math.random() - 0.5) * 0.006,
-      alpha: Math.random() * 0.05 + 0.035
-    };
-  }
+nav ul li a::after{
+  content:"";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  height: 1px;
+  background: var(--ice);
+  box-shadow: 0 0 8px var(--ice);
+  transition: width .25s ease;
+}
 
-  function drawTriangle(s){
-    const h = s.size;
-    ctx.beginPath();
-    ctx.moveTo(0, -h * 0.6);
-    ctx.lineTo(-h * 0.55, h * 0.4);
-    ctx.lineTo(h * 0.55, h * 0.4);
-    ctx.closePath();
-    ctx.stroke();
-  }
+nav ul li a:hover{
+  color: var(--ice);
+}
+nav ul li a:hover::after,
+nav ul li a.active::after{
+  width: 100%;
+}
+nav ul li a.active{
+  color: var(--ice);
+}
 
-  function drawRing(s){
-    ctx.beginPath();
-    ctx.arc(0, 0, s.size * 0.4, 0, Math.PI * 2);
-    ctx.stroke();
-  }
+/* =========================================================
+   HERO (index only)
+   ========================================================= */
+.hero{
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 64px 24px 40px;
+}
 
-  function drawNode(s){
-    const r = s.size * 0.5;
-    ctx.beginPath();
-    ctx.moveTo(-r, 0); ctx.lineTo(r, 0);
-    ctx.moveTo(0, -r); ctx.lineTo(0, r);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(0, 0, 3, 0, Math.PI * 2);
-    ctx.fill();
-  }
+.eyebrow{
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--ice-dim);
+  margin-bottom: 18px;
+}
 
-  function drawShapes(dt){
-    ctx.save();
-    ctx.strokeStyle = "rgba(191,232,255,1)";
-    ctx.fillStyle = "rgba(191,232,255,1)";
-    ctx.lineWidth = 1;
+.hero canvas{
+  width: min(88vw, 460px);
+  height: auto;
+  display: block;
+}
 
-    for(const s of shapes){
-      if(!reduceMotion){
-        s.x += s.dx * dt;
-        s.y += s.dy * dt;
-        s.rot += s.rotSpeed * dt;
+.tagline{
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--grey);
+  margin-top: 8px;
+  letter-spacing: .02em;
+}
+.tagline .cursor{
+  display:inline-block;
+  width: 8px;
+  height: 14px;
+  margin-left: 4px;
+  background: var(--ice);
+  vertical-align: -2px;
+  animation: blink 1.1s steps(1) infinite;
+}
+@keyframes blink{
+  50%{ opacity: 0; }
+}
 
-        const pad = s.size;
-        if(s.x < -pad) s.x = canvas.width + pad;
-        if(s.x > canvas.width + pad) s.x = -pad;
-        if(s.y < -pad) s.y = canvas.height + pad;
-        if(s.y > canvas.height + pad) s.y = -pad;
-      }
+.hero h1{
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(28px, 4vw, 44px);
+  letter-spacing: .01em;
+  line-height: 1.25;
+  max-width: 720px;
+  margin: 28px 0 12px;
+  color: var(--white);
+}
 
-      ctx.save();
-      ctx.globalAlpha = s.alpha;
-      ctx.translate(s.x, s.y);
-      ctx.rotate(s.rot);
-      if(s.type === "triangle") drawTriangle(s);
-      else if(s.type === "ring") drawRing(s);
-      else drawNode(s);
-      ctx.restore();
-    }
-    ctx.restore();
-  }
+.hero p.lede{
+  max-width: 560px;
+  color: var(--grey);
+  font-size: 16px;
+  margin: 0 0 30px;
+}
 
-  let last = null;
+.btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--void);
+  background: var(--ice);
+  padding: 12px 22px;
+  border-radius: 2px;
+  box-shadow: 0 0 20px rgba(191,232,255,.35);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 0 28px rgba(191,232,255,.55);
+}
+.btn .arrow{ transition: transform .15s ease; }
+.btn:hover .arrow{ transform: translateX(3px); }
 
-  function draw(time){
-    if(last === null) last = time;
-    const dt = time - last;
-    last = time;
+/* =========================================================
+   SECTIONS / MAIN
+   ========================================================= */
+main{
+  position: relative;
+  z-index: 1;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 20px 24px 100px;
+}
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+.page-head{
+  padding: 56px 0 8px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 36px;
+}
+.page-head h1{
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(26px, 3.4vw, 36px);
+  margin: 10px 0 14px;
+}
+.page-head p{
+  color: var(--grey);
+  max-width: 60ch;
+  margin: 0 0 24px;
+}
 
-    drawShapes(dt);
+/* =========================================================
+   BUILD LOG / PROJECT CARD
+   ========================================================= */
+.log-entry{
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--panel), rgba(13,18,24,.4));
+  border-radius: 4px;
+  padding: 28px 28px 8px;
+  margin-bottom: 28px;
+}
 
-    for(const s of stars){
-      const y = reduceMotion ? s.y : (s.y + time * s.speed * 0.25) % canvas.height;
-      const twinkle = reduceMotion ? 1 : 0.7 + 0.3 * Math.sin(time * 0.0015 + s.phase);
-      ctx.globalAlpha = s.alpha * twinkle;
-      ctx.fillStyle = "#eaf6ff";
-      ctx.beginPath();
-      ctx.arc(s.x, y, s.r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.globalAlpha = 1;
+.log-entry-head{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
 
-    if(!reduceMotion) requestAnimationFrame(draw);
-  }
+.log-entry h2{
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: .02em;
+  margin: 0;
+  color: var(--white);
+}
 
-  window.addEventListener("resize", resize);
-  resize();
-  requestAnimationFrame(draw);
-})();
+.log-status{
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ice-dim);
+  border: 1px solid var(--ice-dim);
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.log-entry > p{
+  color: var(--grey);
+  margin: 8px 0 22px;
+  max-width: 62ch;
+}
+
+.parts{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  padding-bottom: 24px;
+}
+
+@media (max-width: 640px){
+  .parts{ grid-template-columns: 1fr; }
+}
+
+.parts h3{
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.parts h3.done{ color: var(--ok); }
+.parts h3.pending{ color: var(--pending); }
+
+.parts ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.parts li{
+  font-size: 14px;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mark{
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  line-height: 1;
+}
+.mark.done{
+  background: rgba(143,214,168,.12);
+  color: var(--ok);
+  border: 1px solid rgba(143,214,168,.5);
+}
+.mark.pending{
+  background: rgba(107,117,128,.1);
+  color: var(--pending);
+  border: 1px solid var(--line);
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+footer{
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--line);
+  padding: 22px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--grey);
+  letter-spacing: .04em;
+}
+
+@media (max-width: 560px){
+  header{ padding: 12px 18px; }
+  footer{ padding: 18px; flex-direction: column; gap: 6px; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .tagline .cursor{ animation: none; opacity: 1; }
+  html{ scroll-behavior: auto; }
+}
