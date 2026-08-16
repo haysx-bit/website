@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects — HAYSX</title>
+<meta name="description" content="HAYSX build log — cyberdeck project and other experiments.">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Space+Grotesk:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<header>
+  <a href="index.html" class="brand">
+    <img src="logo.png" alt="HAYSX logo" class="logo">
+    <span class="brand-name">HAYSX</span>
+  </a>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="projects.html" class="active">Projects</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <div class="page-head">
+    <div class="eyebrow">BUILD LOG // 01</div>
+    <h1>Projects</h1>
+    <p>Everything here is a work in progress. Parts get logged as they arrive, and each build stays up as long as it's active.</p>
+  </div>
+
+  <article class="log-entry">
+    <div class="log-entry-head">
+      <h2>Cyberdeck Build</h2>
+      <span class="log-status">In progress</span>
+    </div>
+    <p>A portable rig in a waterproof case, running on an Orange Pi 4 Pro. Core hardware is in — the rest is display, HUD, and cooling.</p>
+
+    <div class="parts">
+      <div>
+        <h3 class="done">Installed</h3>
+        <ul>
+          <li><span class="mark done">✓</span> Waterproof case</li>
+          <li><span class="mark done">✓</span> Orange Pi 4 Pro</li>
+          <li><span class="mark done">✓</span> Keyboard + joystick</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="pending">Remaining</h3>
+        <ul>
+          <li><span class="mark pending">·</span> Screen</li>
+          <li><span class="mark pending">·</span> HUD</li>
+          <li><span class="mark pending">·</span> Fan</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+</main>
+
+<footer>
+  <span>© <span id="year"></span> HAYSX</span>
+  <span>haysx.com</span>
+</footer>
+
+<script src="site.js"></script>
+</body>
+</html>
