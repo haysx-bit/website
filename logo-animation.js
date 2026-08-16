@@ -107,30 +107,6 @@ function drawOrb(p){
   ctx.restore();
 }
 
-const stars=[];
-for(let i=0;i<105;i++){
-  stars.push({
-    x:Math.random()*W, y:Math.random()*H,
-    r:Math.random()<.88 ? Math.random()*.7+.25 : 1.0,
-    speed:Math.random()*.035+.008,
-    alpha:Math.random()*.55+.20,
-    phase:Math.random()*Math.PI*2
-  });
-}
-
-function drawStars(time){
-  ctx.save();
-  for(const s of stars){
-    const x=(s.x + time*s.speed*1.8) % W;
-    const y=(s.y + time*s.speed*.45) % H;
-    const twinkle=.72+.28*Math.sin(time*.002+s.phase);
-    ctx.globalAlpha=s.alpha*twinkle;
-    ctx.fillStyle="#ffffff";
-    ctx.beginPath(); ctx.arc(x,y,s.r,0,Math.PI*2); ctx.fill();
-  }
-  ctx.restore();
-}
-
 function nodeFlash(x,y){
   ctx.save();
   const g=ctx.createRadialGradient(x,y,0,x,y,45);
@@ -250,9 +226,6 @@ let start = performance.now();
 
 function drawFrame(t){
   ctx.clearRect(0,0,W,H);
-  ctx.fillStyle="#000"; ctx.fillRect(0,0,W,H);
-
-  drawStars(performance.now());
 
   ctx.save();
   ctx.globalAlpha=.075;
@@ -326,8 +299,6 @@ function animate(now){
   }
 
   screenCtx.clearRect(0,0,W,H);
-  screenCtx.fillStyle="#000";
-  screenCtx.fillRect(0,0,W,H);
   screenCtx.globalAlpha = fadeAlpha;
   screenCtx.drawImage(bufferCanvas,0,0);
   screenCtx.globalAlpha = 1;
