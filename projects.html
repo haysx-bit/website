@@ -3,142 +3,1061 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Projects — HAYSX</title>
-<meta name="description" content="HAYSX build log — cyberdeck project and other experiments.">
+<meta name="description" content="HAYSX build log — projects, experiments and things being built.">
+
 <link rel="icon" href="logo.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Space+Grotesk:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="style.css">
 
-<!-- NEW: extra styles for dropdown + tabs -->
 <style>
-.project-selector, .project-tabs {
-  margin: 30px 0;
-  text-align: center;
+
+/* =========================================================
+   PROJECT PAGE
+   ========================================================= */
+
+.projects-shell {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 70px 28px 100px;
 }
+
+.project-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 45px 0 25px;
+  flex-wrap: wrap;
+}
+
 .project-selector label {
-  color: #0ff;
+  color: #00ffff;
   font-family: 'Orbitron', sans-serif;
-  margin-right: 10px;
+  font-size: 14px;
+  letter-spacing: 1px;
 }
+
 #projectSelect {
-  background: #111;
-  color: #0ff;
-  border: 1px solid #0ff;
-  padding: 6px 12px;
-  border-radius: 6px;
+  background: #080b0d;
+  color: #00ffff;
+  border: 1px solid #00ffff;
+  padding: 11px 40px 11px 14px;
+  border-radius: 5px;
   font-family: 'JetBrains Mono', monospace;
-}
-.tab-btn {
-  background: #111;
-  color: #0ff;
-  border: 1px solid #0ff;
-  padding: 8px 16px;
-  margin: 0 5px;
+  font-size: 14px;
   cursor: pointer;
+}
+
+#projectSelect:hover {
+  background: #101619;
+}
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+.project-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0 30px;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  background: transparent;
+  color: #00ffff;
+  border: 1px solid #00ffff;
+  padding: 10px 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  transition: 0.2s ease;
+}
+
+.tab-btn:hover,
+.tab-btn.active {
+  background: #00ffff;
+  color: #050708;
+}
+
+/* =========================================================
+   CONTENT PANEL
+   ========================================================= */
+
+.tab-content {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(15, 20, 23, 0.96),
+      rgba(5, 8, 10, 0.96)
+    );
+
+  border: 1px solid rgba(0, 255, 255, 0.65);
+  border-radius: 8px;
+
+  padding: 30px;
+
+  box-shadow:
+    0 0 30px rgba(0, 255, 255, 0.04),
+    inset 0 0 30px rgba(0, 255, 255, 0.015);
+
+  color: #c8d0d4;
+
+  min-height: 150px;
+}
+
+.tab-content h2,
+.tab-content h3 {
+  margin-top: 0;
+  color: #f0f4f5;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.tab-content p {
+  line-height: 1.8;
+}
+
+/* =========================================================
+   ITEMS TABLE
+   ========================================================= */
+
+.items-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+
+.items-table th {
+  text-align: left;
+  color: #00ffff;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.5);
+  padding: 13px 12px;
+  white-space: nowrap;
+}
+
+.items-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  color: #c5cdd0;
+  vertical-align: top;
+}
+
+.items-table tr:hover td {
+  background: rgba(0,255,255,0.025);
+}
+
+.item-status {
+  color: #9aa7ad;
+}
+
+.item-cost {
+  white-space: nowrap;
+  color: #e7edef;
+}
+
+.item-link {
+  color: #00ffff;
+  text-decoration: none;
+}
+
+.item-link:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   BUILD LOG
+   ========================================================= */
+
+.build-log {
+  line-height: 1.8;
+}
+
+.build-log img {
+  display: block;
+  max-width: 100%;
+  max-height: 600px;
+  object-fit: contain;
+  margin: 25px auto 0;
   border-radius: 6px;
+  border: 1px solid rgba(0,255,255,0.2);
+}
+
+/* =========================================================
+   PHOTOS
+   ========================================================= */
+
+.project-photos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.project-photos img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(0,255,255,0.25);
+}
+
+/* =========================================================
+   EMPTY / LOADING
+   ========================================================= */
+
+.project-message {
+  text-align: center;
+  padding: 60px 20px;
+  color: #7f8b91;
   font-family: 'JetBrains Mono', monospace;
 }
-.tab-btn:hover {
-  background: #0ff;
-  color: #111;
+
+.project-error {
+  color: #ff6b6b;
 }
-.tab-content {
-  background: #0a0a0a;
-  border: 1px solid #0ff;
-  padding: 20px;
-  margin: 20px auto;
-  width: 80%;
-  border-radius: 8px;
-  color: #ccc;
-  font-family: 'Space Grotesk', sans-serif;
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .projects-shell {
+    padding: 45px 18px 80px;
+  }
+
+  .tab-content {
+    padding: 20px;
+  }
+
+  .items-table {
+    min-width: 700px;
+  }
+
 }
-.tab-content img {
-  max-width: 100%;
-  border-radius: 6px;
-  margin-top: 10px;
-}
+
 </style>
 </head>
+
 <body>
 
 <canvas id="stars"></canvas>
 
 <header>
+
   <a href="index.html" class="brand">
     <img src="logo.png" alt="HAYSX logo" class="logo">
     <span class="brand-name">HAYSX</span>
   </a>
+
   <nav>
     <ul>
       <li><a href="index.html">Home</a></li>
       <li><a href="projects.html" class="active">Projects</a></li>
     </ul>
   </nav>
+
 </header>
 
+
 <main>
-  <div class="page-head">
-    <div class="eyebrow">BUILD LOG // 01</div>
-    <h1>Projects</h1>
-    <p>Everything here is a work in progress. Parts get logged as they arrive, and each build stays up as long as it's active.</p>
+
+  <div class="projects-shell">
+
+    <div class="page-head">
+
+      <div class="eyebrow">BUILD LOG // PROJECTS</div>
+
+      <h1>Projects</h1>
+
+      <p>
+        Everything here is a work in progress.
+        Parts get logged as they arrive, and each build stays up as long as it's active.
+      </p>
+
+    </div>
+
+
+    <!-- PROJECT SELECTOR -->
+
+    <section class="project-selector" id="selectorArea">
+
+      <label for="projectSelect">
+        SELECT PROJECT:
+      </label>
+
+      <select id="projectSelect">
+        <option>Loading projects...</option>
+      </select>
+
+    </section>
+
+
+    <!-- TABS -->
+
+    <div class="project-tabs" id="tabs">
+
+      <button class="tab-btn active" data-tab="about">
+        ABOUT
+      </button>
+
+      <button class="tab-btn" data-tab="items">
+        ITEMS
+      </button>
+
+      <button class="tab-btn" data-tab="log">
+        BUILD LOG
+      </button>
+
+      <button class="tab-btn" data-tab="photos">
+        PHOTOS
+      </button>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <section id="projectContent">
+
+      <div class="project-message">
+        Loading projects...
+      </div>
+
+    </section>
+
   </div>
 
-  <!-- NEW: Dropdown + Tabs -->
-  <section class="project-selector">
-    <label for="projectSelect">Select Project:</label>
-    <select id="projectSelect">
-      <option value="cyberdeck">Cyberdeck Build</option>
-      <option value="futuredeck">Future Deck</option>
-    </select>
-  </section>
-
-  <div class="project-tabs">
-    <button class="tab-btn" onclick="showTab('about')">About</button>
-    <button class="tab-btn" onclick="showTab('items')">Items</button>
-    <button class="tab-btn" onclick="showTab('log')">Build Log</button>
-  </div>
-
-  <div id="about" class="tab-content">
-    <h3>About Project</h3>
-    <p>A portable rig in a waterproof case, running on an Orange Pi 4 Pro. Designed for field computing and modular upgrades.</p>
-  </div>
-
-  <div id="items" class="tab-content" style="display:none;">
-    <h3>Items</h3>
-    <ul>
-      <li>Waterproof case</li>
-      <li>Orange Pi 4 Pro</li>
-      <li>Keyboard + joystick</li>
-      <li>Screen</li>
-      <li>HUD</li>
-      <li>Fan</li>
-    </ul>
-  </div>
-
-  <div id="log" class="tab-content" style="display:none;">
-    <h3>Build Log</h3>
-    <p>Started assembly on August 17, 2026. Mounted Orange Pi and tested cooling.</p>
-    <img src="images/build1.jpg" alt="Cyberdeck assembly">
-  </div>
 </main>
 
+
 <footer>
-  <span>© <span id="year"></span> HAYSX</span>
-  <span>haysx.com</span>
+
+  <span>
+    © <span id="year"></span> HAYSX
+  </span>
+
+  <span>
+    haysx.com
+  </span>
+
 </footer>
 
-<!-- NEW: Tab switching script -->
-<script>
-document.getElementById('year').textContent = new Date().getFullYear();
 
-function showTab(tabId) {
-  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-  document.getElementById(tabId).style.display = 'block';
+<!-- YAML parser -->
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+
+<!-- Markdown parser -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<!-- HTML sanitizer -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+
+
+<script>
+
+/* =========================================================
+   BASIC SETTINGS
+   ========================================================= */
+
+const GITHUB_API =
+  'https://api.github.com/repos/haysx-bit/website/contents/projects?ref=main';
+
+const projectSelect =
+  document.getElementById('projectSelect');
+
+const projectContent =
+  document.getElementById('projectContent');
+
+const tabButtons =
+  document.querySelectorAll('.tab-btn');
+
+let projects = [];
+let currentProject = null;
+
+
+/* =========================================================
+   YEAR
+   ========================================================= */
+
+document.getElementById('year').textContent =
+  new Date().getFullYear();
+
+
+/* =========================================================
+   LOAD PROJECT FILES FROM GITHUB
+   ========================================================= */
+
+async function loadProjects() {
+
+  try {
+
+    const response = await fetch(GITHUB_API);
+
+    if (!response.ok) {
+      throw new Error('Could not load projects from GitHub.');
+    }
+
+    const files = await response.json();
+
+    const markdownFiles = files.filter(file =>
+      file.type === 'file' &&
+      file.name.toLowerCase().endsWith('.md')
+    );
+
+    if (!markdownFiles.length) {
+
+      projectSelect.innerHTML =
+        '<option>No projects published</option>';
+
+      projectContent.innerHTML = `
+        <div class="project-message">
+          No projects have been published yet.
+        </div>
+      `;
+
+      return;
+    }
+
+
+    /* Load every project */
+
+    projects = await Promise.all(
+
+      markdownFiles.map(async file => {
+
+        const response = await fetch(file.download_url);
+
+        const markdown = await response.text();
+
+        return parseProject(markdown, file.name);
+
+      })
+
+    );
+
+
+    /* Remove broken/empty entries */
+
+    projects = projects.filter(Boolean);
+
+
+    /* Sort alphabetically */
+
+    projects.sort((a, b) =>
+      (a.title || '').localeCompare(b.title || '')
+    );
+
+
+    /* Build dropdown */
+
+    projectSelect.innerHTML = '';
+
+    projects.forEach((project, index) => {
+
+      const option =
+        document.createElement('option');
+
+      option.value = index;
+
+      option.textContent =
+        project.title || project.slug;
+
+      projectSelect.appendChild(option);
+
+    });
+
+
+    /* Show first project */
+
+    showProject(0);
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+    projectContent.innerHTML = `
+      <div class="project-message project-error">
+        Unable to load projects right now.
+      </div>
+    `;
+
+  }
+
 }
+
+
+/* =========================================================
+   PARSE DECАP MARKDOWN
+   ========================================================= */
+
+function parseProject(markdown, filename) {
+
+  const match = markdown.match(
+    /^---\s*([\s\S]*?)\s*---\s*([\s\S]*)$/m
+  );
+
+  if (!match) {
+    console.warn(
+      'Skipping file without front matter:',
+      filename
+    );
+
+    return null;
+  }
+
+  try {
+
+    const data =
+      jsyaml.load(match[1]) || {};
+
+    const body =
+      match[2].trim();
+
+    return {
+
+      ...data,
+
+      body,
+
+      slug:
+        filename.replace(/\.md$/i, '')
+
+    };
+
+  }
+
+  catch (error) {
+
+    console.error(
+      'Could not parse:',
+      filename,
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+
+/* =========================================================
+   SHOW PROJECT
+   ========================================================= */
+
+function showProject(index) {
+
+  currentProject =
+    projects[index];
+
+  if (!currentProject) {
+    return;
+  }
+
+  projectSelect.value = index;
+
+  renderTab('about');
+
+}
+
+
+/* =========================================================
+   TAB BUTTONS
+   ========================================================= */
+
+tabButtons.forEach(button => {
+
+  button.addEventListener('click', () => {
+
+    const tab =
+      button.dataset.tab;
+
+    renderTab(tab);
+
+  });
+
+});
+
+
+/* =========================================================
+   TAB RENDERING
+   ========================================================= */
+
+function renderTab(tab) {
+
+  if (!currentProject) {
+    return;
+  }
+
+
+  tabButtons.forEach(button => {
+
+    button.classList.toggle(
+      'active',
+      button.dataset.tab === tab
+    );
+
+  });
+
+
+  if (tab === 'about') {
+
+    renderAbout();
+
+  }
+
+  else if (tab === 'items') {
+
+    renderItems();
+
+  }
+
+  else if (tab === 'log') {
+
+    renderBuildLog();
+
+  }
+
+  else if (tab === 'photos') {
+
+    renderPhotos();
+
+  }
+
+}
+
+
+/* =========================================================
+   ABOUT
+   ========================================================= */
+
+function renderAbout() {
+
+  const title =
+    escapeHTML(
+      currentProject.title || 'Project'
+    );
+
+  const status =
+    currentProject.status
+      ? `
+        <div style="
+          margin-bottom:20px;
+          color:#00ffff;
+          font-family:'JetBrains Mono',monospace;
+          font-size:12px;
+          letter-spacing:1px;
+        ">
+          STATUS // ${escapeHTML(currentProject.status)}
+        </div>
+      `
+      : '';
+
+
+  const about =
+    currentProject.about ||
+    'No project description has been added yet.';
+
+
+  projectContent.innerHTML = `
+
+    <div class="tab-content">
+
+      <h3>
+        ${title}
+      </h3>
+
+      ${status}
+
+      <div>
+        ${escapeHTML(about).replace(/\n/g, '<br>')}
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   ITEMS TABLE
+   ========================================================= */
+
+function renderItems() {
+
+  const items =
+    Array.isArray(currentProject.items)
+      ? currentProject.items
+      : [];
+
+
+  if (!items.length) {
+
+    projectContent.innerHTML = `
+
+      <div class="tab-content">
+
+        <h3>Items</h3>
+
+        <div class="project-message">
+          No items have been added yet.
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const rows =
+    items.map(item => {
+
+      const section =
+        escapeHTML(item.section || '—');
+
+      const name =
+        escapeHTML(item.item || '—');
+
+      const status =
+        escapeHTML(item.status_notes || '—');
+
+      const cost =
+        escapeHTML(item.cost || '—');
+
+      const link =
+        item.link
+          ? `
+            <a
+              class="item-link"
+              href="${safeURL(item.link)}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              VIEW ↗
+            </a>
+          `
+          : '—';
+
+
+      return `
+
+        <tr>
+
+          <td>${section}</td>
+
+          <td>${name}</td>
+
+          <td class="item-status">
+            ${status}
+          </td>
+
+          <td class="item-cost">
+            ${cost}
+          </td>
+
+          <td>
+            ${link}
+          </td>
+
+        </tr>
+
+      `;
+
+    }).join('');
+
+
+  projectContent.innerHTML = `
+
+    <div class="tab-content">
+
+      <h3>Items</h3>
+
+      <div class="items-table-wrapper">
+
+        <table class="items-table">
+
+          <thead>
+
+            <tr>
+
+              <th>Section</th>
+
+              <th>Item</th>
+
+              <th>Status / Notes</th>
+
+              <th>Cost (SGD)</th>
+
+              <th>Link</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            ${rows}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   BUILD LOG
+   ========================================================= */
+
+function renderBuildLog() {
+
+  const buildLog =
+    currentProject.build_log ||
+    'No build log has been added yet.';
+
+
+  const html =
+    DOMPurify.sanitize(
+      marked.parse(buildLog)
+    );
+
+
+  projectContent.innerHTML = `
+
+    <div class="tab-content build-log">
+
+      <h3>Build Log</h3>
+
+      ${html}
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   PHOTOS
+   ========================================================= */
+
+function renderPhotos() {
+
+  let photos =
+    currentProject.photos;
+
+
+  if (!photos) {
+
+    projectContent.innerHTML = `
+
+      <div class="tab-content">
+
+        <h3>Photos</h3>
+
+        <div class="project-message">
+          No photos have been added yet.
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  /*
+    Depending on the CMS configuration,
+    photos may be a single path or an array.
+  */
+
+  if (!Array.isArray(photos)) {
+    photos = [photos];
+  }
+
+
+  const images =
+    photos
+      .filter(Boolean)
+      .map(photo => {
+
+        const src =
+          normaliseImagePath(photo);
+
+        return `
+
+          <img
+            src="${safeURL(src)}"
+            alt="${escapeHTML(currentProject.title || 'Project photo')}"
+            loading="lazy"
+          >
+
+        `;
+
+      })
+      .join('');
+
+
+  if (!images) {
+
+    projectContent.innerHTML = `
+
+      <div class="tab-content">
+
+        <h3>Photos</h3>
+
+        <div class="project-message">
+          No photos have been added yet.
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  projectContent.innerHTML = `
+
+    <div class="tab-content">
+
+      <h3>Photos</h3>
+
+      <div class="project-photos">
+
+        ${images}
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   IMAGE PATH
+   ========================================================= */
+
+function normaliseImagePath(path) {
+
+  if (!path) {
+    return '';
+  }
+
+  if (
+    path.startsWith('http://') ||
+    path.startsWith('https://') ||
+    path.startsWith('/')
+  ) {
+    return path;
+  }
+
+  return '/' + path.replace(/^\/+/, '');
+
+}
+
+
+/* =========================================================
+   BASIC SECURITY HELPERS
+   ========================================================= */
+
+function escapeHTML(value) {
+
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+
+}
+
+
+function safeURL(value) {
+
+  try {
+
+    const url =
+      new URL(value, window.location.origin);
+
+    if (
+      url.protocol === 'http:' ||
+      url.protocol === 'https:'
+    ) {
+
+      return url.href;
+
+    }
+
+  }
+
+  catch (error) {}
+
+  return '#';
+
+}
+
+
+/* =========================================================
+   PROJECT CHANGE
+   ========================================================= */
+
+projectSelect.addEventListener(
+  'change',
+  () => {
+
+    const index =
+      Number(projectSelect.value);
+
+    showProject(index);
+
+  }
+);
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+loadProjects();
+
 </script>
 
 <script src="site.js"></script>
+
 </body>
 </html>
