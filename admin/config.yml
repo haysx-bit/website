@@ -11,10 +11,59 @@ collections:
     folder: "projects"
     create: true
     slug: "{{slug}}"
+
     fields:
-      - { name: "title", label: "Project Title", widget: "string" }
-      - { name: "status", label: "Status", widget: "string" }
-      - { name: "about", label: "About", widget: "text" }
-      - { name: "items", label: "Items", widget: "list" }
-      - { name: "build_log", label: "Build Log", widget: "markdown" }
-      - { name: "photos", label: "Photos", widget: "image" }
+      - name: "title"
+        label: "Project Title"
+        widget: "string"
+        required: false
+
+      - name: "status"
+        label: "Status"
+        widget: "string"
+        required: false
+
+      - name: "about"
+        label: "About"
+        widget: "text"
+        required: false
+
+      - name: "items"
+        label: "Items"
+        widget: "list"
+        required: false
+        fields:
+          - name: "section"
+            label: "Section"
+            widget: "string"
+            required: false
+
+          - name: "item"
+            label: "Item"
+            widget: "string"
+            required: false
+
+          - name: "status_notes"
+            label: "Status / Notes"
+            widget: "string"
+            required: false
+
+          - name: "cost"
+            label: "Cost (SGD)"
+            widget: "string"
+            required: false
+
+          - name: "link"
+            label: "Link"
+            widget: "string"
+            required: false
+
+      - name: "build_log"
+        label: "Build Log"
+        widget: "markdown"
+        required: false
+
+      - name: "photos"
+        label: "Photos"
+        widget: "image"
+        required: false
