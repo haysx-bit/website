@@ -6,17 +6,6 @@ media_folder: "images"
 public_folder: "/images"
 
 collections:
-  - name: "homepage"
-    label: "Homepage"
-    files:
-      - file: "content/homepage.md"
-        label: "Homepage Content"
-        name: "homepage"
-        fields:
-          - { name: "title", label: "Title", widget: "string" }
-          - { name: "intro", label: "Intro", widget: "text" }
-          - { name: "about", label: "About", widget: "markdown" }
-
   - name: "projects"
     label: "Projects"
     folder: "projects"
