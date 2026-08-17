@@ -10,6 +10,56 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Space+Grotesk:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+
+<!-- NEW: extra styles for dropdown + tabs -->
+<style>
+.project-selector, .project-tabs {
+  margin: 30px 0;
+  text-align: center;
+}
+.project-selector label {
+  color: #0ff;
+  font-family: 'Orbitron', sans-serif;
+  margin-right: 10px;
+}
+#projectSelect {
+  background: #111;
+  color: #0ff;
+  border: 1px solid #0ff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.tab-btn {
+  background: #111;
+  color: #0ff;
+  border: 1px solid #0ff;
+  padding: 8px 16px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.tab-btn:hover {
+  background: #0ff;
+  color: #111;
+}
+.tab-content {
+  background: #0a0a0a;
+  border: 1px solid #0ff;
+  padding: 20px;
+  margin: 20px auto;
+  width: 80%;
+  border-radius: 8px;
+  color: #ccc;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.tab-content img {
+  max-width: 100%;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+</style>
 </head>
 <body>
 
@@ -35,38 +85,59 @@
     <p>Everything here is a work in progress. Parts get logged as they arrive, and each build stays up as long as it's active.</p>
   </div>
 
-  <article class="log-entry">
-    <div class="log-entry-head">
-      <h2>Cyberdeck Build</h2>
-      <span class="log-status">In progress</span>
-    </div>
-    <p>A portable rig in a waterproof case, running on an Orange Pi 4 Pro. Core hardware is in — the rest is display, HUD, and cooling.</p>
+  <!-- NEW: Dropdown + Tabs -->
+  <section class="project-selector">
+    <label for="projectSelect">Select Project:</label>
+    <select id="projectSelect">
+      <option value="cyberdeck">Cyberdeck Build</option>
+      <option value="futuredeck">Future Deck</option>
+    </select>
+  </section>
 
-    <div class="parts">
-      <div>
-        <h3 class="done">Installed</h3>
-        <ul>
-          <li><span class="mark done">✓</span> Waterproof case</li>
-          <li><span class="mark done">✓</span> Orange Pi 4 Pro</li>
-          <li><span class="mark done">✓</span> Keyboard + joystick</li>
-        </ul>
-      </div>
-      <div>
-        <h3 class="pending">Remaining</h3>
-        <ul>
-          <li><span class="mark pending">·</span> Screen</li>
-          <li><span class="mark pending">·</span> HUD</li>
-          <li><span class="mark pending">·</span> Fan</li>
-        </ul>
-      </div>
-    </div>
-  </article>
+  <div class="project-tabs">
+    <button class="tab-btn" onclick="showTab('about')">About</button>
+    <button class="tab-btn" onclick="showTab('items')">Items</button>
+    <button class="tab-btn" onclick="showTab('log')">Build Log</button>
+  </div>
+
+  <div id="about" class="tab-content">
+    <h3>About Project</h3>
+    <p>A portable rig in a waterproof case, running on an Orange Pi 4 Pro. Designed for field computing and modular upgrades.</p>
+  </div>
+
+  <div id="items" class="tab-content" style="display:none;">
+    <h3>Items</h3>
+    <ul>
+      <li>Waterproof case</li>
+      <li>Orange Pi 4 Pro</li>
+      <li>Keyboard + joystick</li>
+      <li>Screen</li>
+      <li>HUD</li>
+      <li>Fan</li>
+    </ul>
+  </div>
+
+  <div id="log" class="tab-content" style="display:none;">
+    <h3>Build Log</h3>
+    <p>Started assembly on August 17, 2026. Mounted Orange Pi and tested cooling.</p>
+    <img src="images/build1.jpg" alt="Cyberdeck assembly">
+  </div>
 </main>
 
 <footer>
   <span>© <span id="year"></span> HAYSX</span>
   <span>haysx.com</span>
 </footer>
+
+<!-- NEW: Tab switching script -->
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+function showTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+  document.getElementById(tabId).style.display = 'block';
+}
+</script>
 
 <script src="site.js"></script>
 </body>
