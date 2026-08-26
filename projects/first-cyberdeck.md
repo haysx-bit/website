@@ -49,9 +49,9 @@ items:
     link: https://www.lazada.sg/products/i13884086132-s124890776697.html?urlFlag=true&mp=1&tradePath=omItm&tradeOrderId=171909995092205&tradeOrderLineId=171909995592205&spm=spm%3Da2o42.order_details.item_title.1
   - link: https://www.lazada.sg/products/i3463955217-s22963372666.html?urlFlag=true&mp=1&tradePath=omItm&tradeOrderId=171909995092205&tradeOrderLineId=171909995392205&spm=spm%3Da2o42.order_details.item_title.1
     section: Cyberdeck
-    status_notes: SGD 4.29
+    status_notes: Purchased
     item: Small Full Range Audio Speaker Stereo
-    cost: "Purchased "
+    cost: SGD 4.29
   - item: " LED light Cooling fan"
     section: Cyberdeck
     status_notes: Purchased - also bought the bracket together with this about $2 extra
