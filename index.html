@@ -2,51 +2,433 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HAYSX — Build Log</title>
-<meta name="description" content="HAYSX build log — cyberdeck project and other experiments.">
-<link rel="icon" href="logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Space+Grotesk:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HaysX - Cyberdeck Build Log</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Cyber';
+    src: url('https://assets.codepen.io/605876/Blender-Pro-Bold.otf');
+    font-display: swap;
+  }
+
+  :root {
+    --bg: #030508;
+    --accent: #00f3ff;
+    --white: #ffffff;
+    --grey: #8a9bbd;
+    --corner: 12px;
+    --border: 1px;
+    --clip: polygon(0 0, 100% 0, 100% calc(100% - var(--corner)), calc(100% - var(--corner)) 100%, 0% 100%);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body, html {
+    width: 100%; height: 100%;
+    background-color: var(--bg);
+    overflow: hidden;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--white);
+    color-scheme: dark;
+  }
+
+  /* CRT Scanlines & Vignette */
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: 100;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.25) 3px, rgba(0, 0, 0, 0.25) 4px);
+    pointer-events: none;
+  }
+  body::after {
+    content: ""; position: fixed; inset: 0; z-index: 99;
+    background: radial-gradient(circle at center, transparent 35%, rgba(0, 0, 0, 0.8) 100%);
+    pointer-events: none;
+  }
+
+  /* Dense PCB Canvas Background */
+  #bgCanvas {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  }
+
+  /* Top Navigation */
+  .topnav {
+    position: absolute; top: 0; left: 0; width: 100%;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 25px 40px; z-index: 10;
+  }
+
+  .nav-logo {
+    font-size: 22px; font-weight: 800; letter-spacing: 5px; color: var(--white);
+    text-decoration: none;
+    text-shadow: 0 0 10px var(--white), 0 0 20px var(--accent), 0 0 40px var(--accent), 0 0 70px var(--accent);
+    transition: text-shadow 0.2s;
+  }
+  .nav-logo:hover {
+    text-shadow: 0 0 15px var(--white), 0 0 30px var(--accent), 0 0 60px var(--accent), 0 0 90px var(--accent);
+  }
+
+  .nav-links { display: flex; gap: 30px; font-size: 13px; font-weight: 600; letter-spacing: 2px; }
+  .nav-links a { color: var(--grey); text-decoration: none; transition: all 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); text-shadow: 0 0 12px var(--accent); }
+
+  /* Hero Layout */
+  .hero {
+    position: relative; width: 100%; height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 40px 20px; z-index: 2;
+  }
+
+  .hero-content {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    background: rgba(4, 7, 12, 0.90);
+    padding: 30px 40px;
+    backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(0, 243, 255, 0.3);
+    box-shadow: 0 0 80px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 243, 255, 0.15);
+  }
+
+  /* Theme Switcher Bar */
+  .theme-switcher {
+    display: flex; gap: 10px; margin-bottom: 25px; align-items: center; font-size: 10px; letter-spacing: 2px; color: var(--grey);
+  }
+  .theme-btn {
+    width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--white); cursor: pointer; transition: transform 0.2s;
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+  }
+  .theme-btn:hover { transform: scale(1.2); }
+
+  /* Holographic Scanner Stage */
+  .stage {
+    position: relative;
+    width: 420px; height: 210px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    margin-bottom: 25px;
+    border: 2px solid var(--accent);
+    background: rgba(5, 8, 14, 0.98);
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 243, 255, 0.35);
+  }
+
+  .stage::before {
+    content: "";
+    position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+    background: var(--accent);
+    box-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent);
+    opacity: 1;
+    animation: scanBeam 3.5s ease-in-out infinite alternate;
+    z-index: 5;
+  }
+
+  @keyframes scanBeam {
+    0% { top: 2%; opacity: 0.5; }
+    50% { opacity: 1; filter: drop-shadow(0 0 10px var(--accent)); }
+    100% { top: 96%; opacity: 0.5; }
+  }
+
+  .bracket { position: absolute; width: 12px; height: 12px; border-color: var(--accent); border-style: solid; opacity: 1; box-shadow: 0 0 8px var(--accent); }
+  .b-tl { top: 6px; left: 6px; border-width: 2px 0 0 2px; }
+  .b-tr { top: 6px; right: 6px; border-width: 2px 2px 0 0; }
+  .b-bl { bottom: 6px; left: 6px; border-width: 0 0 2px 2px; }
+  .b-br { bottom: 6px; right: 6px; border-width: 0 2px 2px 0; }
+
+  .scanner-display { text-align: center; padding: 15px; width: 100%; }
+
+  .status-text {
+    font-size: 9px; font-weight: 600; letter-spacing: 3px; color: var(--accent);
+    text-transform: uppercase; margin-bottom: 6px;
+    text-shadow: 0 0 10px var(--accent);
+  }
+
+  .logo-main {
+    font-size: 48px; font-weight: 800; letter-spacing: 8px; color: var(--white);
+    text-shadow: 0 0 15px var(--white), 0 0 35px var(--accent), 0 0 70px var(--accent);
+    position: relative; margin-bottom: 8px;
+  }
+
+  .telemetry-feed {
+    display: flex; justify-content: space-between;
+    font-size: 9px; color: var(--grey); border-top: 1px dashed rgba(255,255,255,0.25);
+    padding-top: 8px; margin-top: 5px; letter-spacing: 1px;
+  }
+
+  .section-tag { font-size: 10px; font-weight: 600; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; text-shadow: 0 0 10px var(--accent); }
+  .headline { font-size: 32px; font-weight: 800; letter-spacing: 1px; margin-bottom: 12px; max-width: 650px; text-shadow: 0 0 15px rgba(255,255,255,0.3); }
+  .description { font-size: 13px; font-weight: 400; color: var(--grey); max-width: 500px; line-height: 1.6; margin-bottom: 25px; }
+
+  /* Cyber Action Button */
+  .cyber-btn {
+    font-family: 'Cyber', sans-serif;
+    width: 180px; text-align: left; text-transform: uppercase;
+    display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem;
+    border: 0; background: #0000; position: relative; color: var(--accent); cursor: pointer; text-decoration: none;
+    filter: drop-shadow(0 0 12px rgba(0, 243, 255, 0.3));
+  }
+  .cyber-btn * { pointer-events: none; }
+  .cyber-btn .backdrop {
+    backdrop-filter: saturate(180%) blur(6px); position: absolute; z-index: -1; inset: 0; background: rgba(0, 0, 0, 0.6); clip-path: var(--clip);
+  }
+  .cyber-btn .backdrop::before {
+    content: ''; position: absolute; inset: 0; background: var(--accent);
+    border: var(--border) solid #0000; clip-path: var(--clip);
+    mask: linear-gradient(#0000 0% 100%), linear-gradient(#fff 0% 100%);
+    mask-clip: padding-box, border-box; mask-repeat: no-repeat; mask-composite: intersect; z-index: 2;
+  }
+  .cyber-btn .backdrop .corner {
+    position: absolute; bottom: 0; right: 0; height: var(--corner); width: var(--corner);
+  }
+  .cyber-btn .backdrop .corner::after {
+    content: ''; height: calc(var(--border) * 2); width: 200%;
+    position: absolute; top: 50%; left: 50%; translate: -50% -50%;
+    transform: rotate(135deg); background: var(--accent); box-shadow: 0 0 8px var(--accent);
+  }
+  .cyber-btn kbd {
+    color: var(--bg); font-weight: bold; width: 18px; aspect-ratio: 1; font-size: 9px; border-radius: 50%; background: var(--accent); display: inline-grid; place-items: center;
+    box-shadow: 0 0 8px var(--accent);
+  }
+  .cyber-btn:hover { color: var(--bg); }
+  .cyber-btn:hover .backdrop { background: var(--accent); }
+  .cyber-btn:hover kbd { color: var(--accent); background: var(--white); }
+
+  /* HaysX Bottom Right Corner */
+  .brand-corner {
+    position: fixed; bottom: 35px; right: 45px; z-index: 10; text-align: right; text-decoration: none; display: block;
+  }
+  .wordmark {
+    font-size: 28px; font-weight: 800; letter-spacing: 4px; color: var(--white);
+    text-shadow: 0 0 15px var(--white), 0 0 30px var(--accent), 0 0 55px var(--accent), 0 0 80px var(--accent);
+    transition: text-shadow 0.2s;
+  }
+  .wordmark:hover {
+    text-shadow: 0 0 20px var(--white), 0 0 40px var(--accent), 0 0 70px var(--accent), 0 0 100px var(--accent);
+  }
+  .sub-tag {
+    font-size: 9px; font-weight: 600; letter-spacing: 2px; color: var(--accent); opacity: 1;
+    text-shadow: 0 0 12px var(--accent);
+  }
+</style>
 </head>
 <body>
 
-<canvas id="stars"></canvas>
+  <canvas id="bgCanvas"></canvas>
 
-<header>
-  <a href="index.html" class="brand">
-    <img src="logo.png" alt="HAYSX logo" class="logo">
-    <span class="brand-name">HAYSX</span>
-  </a>
-  <nav>
-    <ul>
-      <li><a href="index.html" class="active">Home</a></li>
-      <li><a href="projects.html">Projects</a></li>
-    </ul>
+  <nav class="topnav">
+    <a href="index.html" class="nav-logo">HAYSX</a>
+    <div class="nav-links">
+      <a href="index.html" class="active">HOME</a>
+      <a href="projects.html">PROJECTS</a>
+    </div>
   </nav>
-</header>
 
-<section class="hero">
-  <div class="eyebrow">HAYSX // BUILD LOG</div>
+  <div class="hero">
+    <div class="hero-content">
+      
+      <div class="theme-switcher">
+        <span>THEME:</span>
+        <div class="theme-btn" style="background: #00f3ff;" onclick="setTheme('#00f3ff')" title="Cyber Cyan"></div>
+        <div class="theme-btn" style="background: #ff6a00;" onclick="setTheme('#ff6a00')" title="Pip-Boy Amber"></div>
+        <div class="theme-btn" style="background: #00ff66;" onclick="setTheme('#00ff66')" title="Matrix Green"></div>
+        <div class="theme-btn" style="background: #ff00ff;" onclick="setTheme('#ff00ff')" title="Synthwave Magenta"></div>
+      </div>
 
-  <canvas id="haysx" width="634" height="439"></canvas>
+      <div class="stage">
+        <div class="bracket b-tl"></div>
+        <div class="bracket b-tr"></div>
+        <div class="bracket b-bl"></div>
+        <div class="bracket b-br"></div>
 
-  <p class="tagline">documenting things as they get built<span class="cursor"></span></p>
+        <div class="scanner-display">
+          <div class="status-text">> CORE SYSTEM DIAGNOSTIC ACTIVE</div>
+          <div class="logo-main">HaysX</div>
+          <div class="telemetry-feed">
+            <span>CORE: <strong style="color:var(--white); font-weight:600; text-shadow: 0 0 8px var(--accent);">MAHAYSAN</strong></span>
+            <span>CPU: <strong id="cpuLoad" style="color:var(--white); font-weight:600; text-shadow: 0 0 8px var(--accent);">28%</strong></span>
+            <span>CLOCK: <strong id="sysClock" style="color:var(--white); font-weight:600; text-shadow: 0 0 8px var(--accent);">00:00:00</strong></span>
+          </div>
+        </div>
+      </div>
 
-  <h1>Projects, prototypes, and the occasional cyberdeck.</h1>
-  <p class="lede">This is where builds get tracked from parts pile to finished thing — starting with a waterproof-case cyberdeck running on an Orange&nbsp;Pi.</p>
+      <div class="section-tag">documenting things as they get built</div>
+      
+      <h1 class="headline">Projects, prototypes, and the occasional cyberdeck.</h1>
+      
+      <p class="description">
+        This is where builds get tracked from parts pile to finished thing — starting with a custom-case cyberdeck.
+      </p>
 
-  <a href="projects.html" class="btn">View projects <span class="arrow">→</span></a>
-</section>
+      <a href="projects.html" class="cyber-btn">
+        <span class="backdrop"><span class="corner"></span></span>
+        <kbd>→</kbd>
+        <span>View Projects</span>
+      </a>
 
-<footer>
-  <span>© <span id="year"></span> HAYSX</span>
-  <span>haysx.com</span>
-</footer>
+    </div>
+  </div>
 
-<script src="site.js"></script>
-<script src="logo-animation.js"></script>
+  <a href="index.html" class="brand-corner">
+    <div class="wordmark">HaysX</div>
+    <div class="sub-tag">www.haysx.com</div>
+  </a>
+
+<script>
+  // Live Clock & Fluctuating CPU Load simulation
+  setInterval(() => {
+    const d = new Date();
+    document.getElementById('sysClock').innerText = d.toTimeString().split(' ')[0];
+    let load = Math.floor(22 + Math.random() * 12);
+    document.getElementById('cpuLoad').innerText = load + '%';
+  }, 1000);
+
+  function setTheme(color) {
+    document.documentElement.style.setProperty('--accent', color);
+  }
+
+  // --- High-Visibility PCB Circuit & Live Cursor Light Engine ---
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+    generateDensePCB();
+  });
+
+  let mouse = { x: -1000, y: -1000 };
+  let scrollOffset = 0;
+
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+
+  window.addEventListener('scroll', () => {
+    scrollOffset = window.scrollY * 0.3;
+  });
+
+  let pcbTraces = [];
+  let pcbNodes = [];
+
+  function generateDensePCB() {
+    pcbTraces = [];
+    pcbNodes = [];
+
+    let cx = width / 2;
+    let cy = height / 2;
+    let safeW = 860;
+    let safeH = 600;
+
+    for (let i = 0; i < 45; i++) {
+      let startX = Math.random() * width;
+      let startY = Math.random() * (height + 300);
+
+      let path = [{x: startX, y: startY}];
+      pcbNodes.push({x: startX, y: startY});
+
+      let turns = Math.floor(Math.random() * 4) + 3;
+      let currX = startX;
+      let currY = startY;
+
+      for (let t = 0; t < turns; t++) {
+        if (t % 2 === 0) currX += (Math.random() - 0.5) * 454;
+        else currY += (Math.random() - 0.5) * 454;
+
+        path.push({x: currX, y: currY});
+        pcbNodes.push({x: currX, y: currY});
+      }
+      pcbTraces.push(path);
+    }
+  }
+
+  generateDensePCB();
+
+  function drawPCB() {
+    // Rich blackish-grey canvas background
+    ctx.fillStyle = '#030508';
+    ctx.fillRect(0, 0, width, height);
+
+    const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+
+    ctx.save();
+    ctx.translate(0, -scrollOffset % height);
+
+    let cx = width / 2;
+    let cy = height / 2;
+    let safeW = 860;
+    let safeH = 600;
+
+    // 1. Draw Dense Right-Angle Circuit Traces with enhanced visibility
+    pcbTraces.forEach(path => {
+      ctx.beginPath();
+      ctx.moveTo(path[0].x, path[0].y);
+      for (let i = 1; i < path.length; i++) {
+        let prev = path[i - 1];
+        let curr = path[i];
+        ctx.lineTo(curr.x, prev.y);
+        ctx.lineTo(curr.x, curr.y);
+      }
+
+      let nearMouse = false;
+      for (let pt of path) {
+        if (Math.hypot(pt.x - mouse.x, pt.y - mouse.y) < 180) {
+          nearMouse = true;
+          break;
+        }
+      }
+
+      if (nearMouse) {
+        ctx.strokeStyle = '#ffffff';
+        ctx.shadowColor = accentColor;
+        ctx.shadowBlur = 20;
+        ctx.lineWidth = 2.2;
+        ctx.globalAlpha = 1.0;
+      } else {
+        ctx.strokeStyle = accentColor;
+        ctx.shadowBlur = 0;
+        ctx.lineWidth = 1.2;
+        ctx.globalAlpha = 0.28;
+      }
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    });
+
+    // 2. Draw Circuit Solder Vias / Connection Pads that pop brightly
+    pcbNodes.forEach(node => {
+      let inCenter = Math.abs(node.x - cx) < safeW/2 && Math.abs(node.y - (cy + scrollOffset%height)) < safeH/2;
+      if (inCenter) return;
+
+      let dist = Math.hypot(node.x - mouse.x, node.y - mouse.y);
+      let isConnected = dist < 180;
+
+      ctx.fillStyle = isConnected ? '#ffffff' : accentColor;
+      ctx.globalAlpha = isConnected ? 1.0 : 0.45;
+      if (isConnected) {
+        ctx.shadowColor = accentColor;
+        ctx.shadowBlur = 18;
+      }
+
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, isConnected ? 4.5 : 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      if (isConnected && dist < 130) {
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1.5;
+        ctx.globalAlpha = (1 - (dist / 130)) * 0.85;
+        ctx.beginPath();
+        ctx.moveTo(node.x, node.y);
+        ctx.lineTo(mouse.x, mouse.y);
+        ctx.stroke();
+      }
+    });
+
+    ctx.restore();
+    requestAnimationFrame(drawPCB);
+  }
+
+  drawPCB();
+</script>
+
 </body>
 </html>
