@@ -530,4 +530,120 @@
     }
   }
 
-  /* =================================
+  /* =========================================================
+     CALCULATE TOTAL COST
+     ========================================================= */
+  function calculateTotalCost(project) {
+    let sum = 0;
+    if (project && Array.isArray(project.items)) {
+      project.items.forEach(i => {
+        // Strip everything except numbers and decimals (works with $ or SGD)
+        let numericValue = parseFloat(String(i.cost || 0).replace(/[^0-9.]/g, '')) || 0;
+        sum += numericValue;
+      });
+    }
+    document.getElementById('totalCostBadge').innerText = `TOTAL: SGD ${sum.toFixed(2)}`;
+  }
+
+  /* =========================================================
+     SHOW SELECTED PROJECT
+     ========================================================= */
+  function showProject(index) {
+    currentProject = projects[index];
+    if (!currentProject) return;
+
+    projectSelect.value = index;
+    calculateTotalCost(currentProject);
+    renderTab(currentTab);
+  }
+
+  /* =========================================================
+     TAB LOGIC & RENDERING
+     ========================================================= */
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      currentTab = button.dataset.tab;
+      renderTab(currentTab);
+    });
+  });
+
+  function renderTab(tab) {
+    if (!currentProject) return;
+
+    // Update active tab button UI
+    tabButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
+
+    if (tab === 'about') {
+      screenTitle.innerText = currentProject.title || 'Unknown Project';
+      screenStatus.innerText = "STATUS // " + (currentProject.status || "Active");
+      screenBody.innerHTML = (currentProject.about || "No project description provided.").replace(/\n/g, '<br>');
+    } 
+    else if (tab === 'items') {
+      const items = Array.isArray(currentProject.items) ? currentProject.items : [];
+      screenTitle.innerText = "Bill of Materials (" + items.length + " Items)";
+      screenStatus.innerText = "STATUS // Logged";
+
+      if (!items.length) {
+        screenBody.innerHTML = "No items have been added yet.";
+        return;
+      }
+
+      let htmlList = '<div style="display: flex; flex-direction: column; gap: 4px;">';
+      items.forEach(i => {
+        htmlList += `
+          <div class="item-row">
+            <div class="item-info">
+              <div class="item-name">${i.item || '—'}</div>
+              <div class="item-notes">${i.status_notes || '—'}</div>
+            </div>
+            <div class="item-meta">
+              <div class="item-cost">${i.cost || '—'}</div>
+              ${i.link && i.link !== '#' ? `<a href="${i.link}" target="_blank" class="item-link">VIEW ↗</a>` : ''}
+            </div>
+          </div>`;
+      });
+      htmlList += '</div>';
+      screenBody.innerHTML = htmlList;
+    } 
+    else if (tab === 'log') {
+      screenTitle.innerText = "Build Log Entries";
+      screenStatus.innerText = "STATUS // Active Logging";
+      
+      const logContent = currentProject.build_log || currentProject.body || "No build log has been added yet.";
+      screenBody.innerHTML = `<div class="build-log-content">${DOMPurify.sanitize(marked.parse(logContent))}</div>`;
+    } 
+    else if (tab === 'photos') {
+      screenTitle.innerText = "Visual Blueprints";
+      screenStatus.innerText = "STATUS // Media Array Ready";
+
+      let photos = currentProject.photos;
+      if (!photos) {
+        screenBody.innerHTML = "No photos have been added yet.";
+        return;
+      }
+
+      if (!Array.isArray(photos)) photos = [photos];
+
+      let imagesHtml = photos.filter(Boolean).map(photo => {
+        let src = photo;
+        if (!src.startsWith('http') && !src.startsWith('/')) src = '/' + src.replace(/^\/+/, '');
+        return `<img src="${src}" alt="Project Photo" style="max-width:100%; border:1px solid var(--border-glow); margin-top:10px;">`;
+      }).join('');
+
+      screenBody.innerHTML = imagesHtml || "No valid photos found.";
+    }
+  }
+
+  // Handle dropdown change
+  projectSelect.addEventListener('change', () => {
+    showProject(Number(projectSelect.value));
+  });
+
+  // Start initialization instantly with fallback data, then look for updates
+  showProject(0);
+  loadProjects();
+
+</script>
+
+</body>
+</html>
