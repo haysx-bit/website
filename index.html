@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <title>HaysX - Cyberdeck Build Log</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -26,10 +26,10 @@
 
   body, html {
     width: 100%; 
-    min-height: 100%;
+    min-height: 100vh;
     background-color: var(--bg);
     overflow-x: hidden;
-    overflow-y: auto; /* Scrolling explicitly unlocked */
+    overflow-y: auto; 
     font-family: 'JetBrains Mono', monospace;
     color: var(--white);
     color-scheme: dark;
@@ -76,9 +76,9 @@
   /* Hero Layout */
   .hero {
     position: relative; width: 100%; 
-    min-height: 100vh; height: auto;
+    min-height: 100vh;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 120px 20px 60px 20px; 
+    padding: 100px 20px 40px 20px; 
     z-index: 2;
   }
 
@@ -170,7 +170,6 @@
     display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem;
     border: 0; background: #0000; position: relative; color: var(--accent); cursor: pointer; text-decoration: none;
     filter: drop-shadow(0 0 12px rgba(0, 243, 255, 0.3));
-    margin-bottom: 20px;
   }
   .cyber-btn * { pointer-events: none; }
   .cyber-btn .backdrop {
@@ -198,7 +197,7 @@
   .cyber-btn:hover .backdrop { background: var(--accent); }
   .cyber-btn:hover kbd { color: var(--accent); background: var(--white); }
 
-  /* HaysX Bottom Right Corner */
+  /* HaysX Bottom Right Corner (Desktop Default) */
   .brand-corner {
     position: fixed; bottom: 35px; right: 45px; z-index: 10; text-align: right; text-decoration: none; display: block;
   }
@@ -216,7 +215,7 @@
   }
 
   /* =========================================================
-     MOBILE RESPONSIVENESS (Phones & Small Tablets)
+     MOBILE RESPONSIVENESS FIXES
      ========================================================= */
   @media (max-width: 768px) {
     .topnav { 
@@ -232,29 +231,33 @@
     }
     
     .hero {
-      padding-top: 90px;
+      padding: 90px 15px 40px 15px;
     }
     .hero-content { 
       padding: 25px 15px; 
       border-radius: 8px;
     }
     
+    /* Shrink the scanner box */
     .stage {
-      min-height: 180px;
+      min-height: 160px;
+      padding: 10px;
     }
     .logo-main { 
-      font-size: 32px; 
+      font-size: 28px; /* Shrunk from 48px */
       letter-spacing: 4px; 
     }
     
+    /* Stack the telemetry stats vertically so they don't break the box */
     .telemetry-feed { 
       flex-direction: column; 
       gap: 8px; 
       align-items: center; 
+      font-size: 10px;
     }
     
     .headline { 
-      font-size: 20px; 
+      font-size: 20px; /* Shrunk from 32px */
       line-height: 1.4;
     }
     
@@ -262,12 +265,12 @@
       font-size: 12px;
     }
 
-    /* Move the logo into the normal flow so it doesn't overlap text */
+    /* KILL the overlapping fixed logo on mobile. Put it neatly at the bottom. */
     .brand-corner { 
-      position: relative; 
+      position: relative; /* Removes it from the corner */
       bottom: auto; 
       right: auto;
-      margin-top: 20px;
+      margin-top: 35px;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -333,13 +336,12 @@
         <span>View Projects</span>
       </a>
 
-      <!-- Moved the logo inside the scrolling container on mobile -->
-      <a href="index.html" class="brand-corner">
-        <div class="wordmark">HaysX</div>
-        <div class="sub-tag">www.haysx.com</div>
-      </a>
-
     </div>
+
+    <a href="index.html" class="brand-corner">
+      <div class="wordmark">HaysX</div>
+      <div class="sub-tag">www.haysx.com</div>
+    </a>
   </div>
 
 <script>
@@ -355,7 +357,7 @@
     document.documentElement.style.setProperty('--accent', color);
   }
 
-  // --- High-Visibility PCB Circuit & Live Cursor Light Engine ---
+  // --- High-Visibility PCB Circuit Background ---
   const canvas = document.getElementById('bgCanvas');
   const ctx = canvas.getContext('2d');
 
@@ -389,7 +391,7 @@
     pcbNodes = [];
 
     // Scale density based on screen width
-    let density = width < 768 ? 20 : 45;
+    let density = width < 768 ? 15 : 45;
 
     for (let i = 0; i < density; i++) {
       let startX = Math.random() * width;
@@ -403,8 +405,8 @@
       let currY = startY;
 
       for (let t = 0; t < turns; t++) {
-        if (t % 2 === 0) currX += (Math.random() - 0.5) * (width < 768 ? 250 : 454);
-        else currY += (Math.random() - 0.5) * (width < 768 ? 250 : 454);
+        if (t % 2 === 0) currX += (Math.random() - 0.5) * (width < 768 ? 200 : 454);
+        else currY += (Math.random() - 0.5) * (width < 768 ? 200 : 454);
 
         path.push({x: currX, y: currY});
         pcbNodes.push({x: currX, y: currY});
@@ -426,8 +428,8 @@
 
     let cx = width / 2;
     let cy = height / 2;
-    let safeW = width < 768 ? 320 : 860;
-    let safeH = width < 768 ? 500 : 600;
+    let safeW = width < 768 ? 300 : 860;
+    let safeH = width < 768 ? 450 : 600;
 
     // 1. Draw Dense Right-Angle Circuit Traces
     pcbTraces.forEach(path => {
