@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Strict mobile scaling to prevent the "zoomed out" bug -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <title>HaysX - Project Terminal</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
@@ -28,6 +29,7 @@
     color: var(--white);
     color-scheme: dark;
     overflow-x: hidden;
+    overflow-y: auto;
   }
 
   /* Sci-Fi CRT Vignette & Scanlines */
@@ -46,8 +48,8 @@
   .workbench-grid {
     position: fixed; inset: 0;
     background-image: 
-      linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
     background-size: 40px 40px;
     z-index: 0;
     pointer-events: none;
@@ -116,7 +118,7 @@
     font-size: 10px;
     letter-spacing: 2px;
     color: var(--cyan);
-    border-bottom: 1px solid rgba(0, 243, 255, 0.25);
+    border-bottom: 1px solid var(--cyan);
     padding-bottom: 6px;
     margin-bottom: 20px;
     opacity: 0.9;
@@ -158,8 +160,8 @@
     font-weight: 600;
     letter-spacing: 1px;
     color: var(--cyan);
-    background: rgba(0, 243, 255, 0.08);
-    border: 1px solid rgba(0, 243, 255, 0.3);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--cyan);
     padding: 4px 10px;
     text-shadow: 0 0 8px var(--cyan);
   }
@@ -170,13 +172,23 @@
     line-height: 1.5;
   }
 
+  /* Theme Switcher Bar */
+  .theme-switcher {
+    display: flex; gap: 10px; margin-top: 15px; align-items: center; font-size: 10px; letter-spacing: 2px; color: var(--grey);
+  }
+  .theme-btn {
+    width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--white); cursor: pointer; transition: transform 0.2s;
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+  }
+  .theme-btn:hover { transform: scale(1.2); }
+
   /* Control Panel Dashboard Box */
   .dashboard-panel {
     width: 100%;
     max-width: 680px;
     background: var(--dark-panel);
-    border: 1.5px solid var(--border-glow);
-    box-shadow: 0 0 80px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 243, 255, 0.15);
+    border: 1.5px solid var(--cyan);
+    box-shadow: 0 0 80px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 0, 0, 0.5);
     padding: 25px;
     position: relative;
     backdrop-filter: blur(12px);
@@ -207,7 +219,7 @@
 
   .cyber-select {
     background: #030406;
-    border: 1px solid rgba(0, 243, 255, 0.4);
+    border: 1px solid var(--cyan);
     color: var(--white);
     padding: 10px 14px;
     font-family: 'JetBrains Mono', monospace;
@@ -226,8 +238,8 @@
   }
 
   .tab-btn {
-    background: rgba(0, 243, 255, 0.03);
-    border: 1px solid rgba(0, 243, 255, 0.25);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--cyan);
     color: var(--grey);
     padding: 10px 0;
     text-align: center;
@@ -253,7 +265,7 @@
     border: 1px solid rgba(138, 155, 189, 0.2);
     padding: 20px;
     min-height: 180px;
-    max-height: 400px;
+    max-height: 450px;
     overflow-y: auto;
   }
 
@@ -334,7 +346,7 @@
   .build-log-content img {
     max-width: 100%;
     margin-top: 15px;
-    border: 1px solid var(--border-glow);
+    border: 1px solid var(--cyan);
   }
   .build-log-content p {
     margin-bottom: 15px;
@@ -356,6 +368,51 @@
     font-size: 9px; font-weight: 600; letter-spacing: 2px; color: var(--cyan); opacity: 1;
     text-shadow: 0 0 12px var(--cyan);
   }
+
+  /* =========================================================
+     MOBILE RESPONSIVENESS (Phones & Small Tablets)
+     ========================================================= */
+  @media (max-width: 768px) {
+    .topnav { 
+      padding: 15px; 
+      flex-direction: column; 
+      gap: 15px;
+      background: rgba(3, 5, 8, 0.9);
+      border-bottom: 1px solid var(--cyan);
+    }
+    .nav-logo { font-size: 18px; letter-spacing: 3px; }
+    .nav-links { gap: 20px; font-size: 11px; }
+
+    /* Shrink bottom padding since logo is handled dynamically */
+    .terminal-container { padding: 110px 10px 20px 10px; }
+    
+    .page-title-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .page-title { font-size: 24px; }
+    
+    .dashboard-panel { padding: 15px; border-width: 1px; }
+    
+    /* Stack tabs 2x2 grid on mobile for easy tapping */
+    .sub-tabs { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    
+    .content-screen { padding: 15px; }
+    .item-name { font-size: 12px; }
+    .item-cost { font-size: 12px; }
+
+    /* Move logo entirely into the scroll flow, pushing it below the dashboard */
+    .brand-corner { 
+      position: relative; 
+      bottom: auto; 
+      right: auto;
+      margin-top: 40px; 
+      margin-bottom: 30px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .wordmark { font-size: 24px; }
+  }
 </style>
 </head>
 <body>
@@ -374,7 +431,7 @@
     
     <div class="telemetry-banner">
       <span>SYS_ID: HAYSX_ARCHIVE</span>
-      <span>HOST: GITHUB_API</span>
+      <span>HOST: NETLIFY</span>
     </div>
 
     <div class="page-header">
@@ -383,6 +440,15 @@
         <div class="total-cost-badge" id="totalCostBadge">TOTAL: SGD 0.00</div>
       </div>
       <p class="page-desc">Everything here is a work in progress. Parts get logged as they arrive, and each build stays up as long as it's active.</p>
+      
+      <!-- Theme Switcher -->
+      <div class="theme-switcher">
+        <span>THEME:</span>
+        <div class="theme-btn" style="background: #00f3ff;" onclick="setTheme('#00f3ff')" title="Cyber Cyan"></div>
+        <div class="theme-btn" style="background: #ff6a00;" onclick="setTheme('#ff6a00')" title="Pip-Boy Amber"></div>
+        <div class="theme-btn" style="background: #00ff66;" onclick="setTheme('#00ff66')" title="Matrix Green"></div>
+        <div class="theme-btn" style="background: #ff00ff;" onclick="setTheme('#ff00ff')" title="Synthwave Magenta"></div>
+      </div>
     </div>
 
     <div class="dashboard-panel">
@@ -413,14 +479,19 @@
 
     </div>
 
+    <a href="index.html" class="brand-corner">
+      <div class="wordmark">HaysX</div>
+      <div class="sub-tag">www.haysx.com</div>
+    </a>
+
   </div>
 
-  <a href="index.html" class="brand-corner">
-    <div class="wordmark">HaysX</div>
-    <div class="sub-tag">www.haysx.com</div>
-  </a>
-
 <script>
+  // Dynamic Theme Application
+  function setTheme(color) {
+    document.documentElement.style.setProperty('--cyan', color);
+  }
+
   /* =========================================================
      YOUR SAFE HARDCODED FALLBACK DATA
      ========================================================= */
@@ -464,7 +535,6 @@
   const screenBody = document.getElementById('screenBody');
   const tabButtons = document.querySelectorAll('.tab-btn');
 
-  // Load the hardcoded items instantly so they are never "missing"
   let projects = [fallbackProject];
   let currentProject = null;
   let currentTab = 'about';
@@ -481,7 +551,6 @@
       const markdownFiles = files.filter(file => file.type === 'file' && file.name.toLowerCase().endsWith('.md'));
 
       if (markdownFiles.length > 0) {
-        // Fetch all markdown files from Netlify CMS
         const fetchedProjects = await Promise.all(
           markdownFiles.map(async file => {
             const res = await fetch(file.download_url);
@@ -490,11 +559,9 @@
           })
         );
 
-        // Replace the fallback data with the live fetched data
         projects = fetchedProjects.filter(Boolean);
         projects.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
         
-        // Update the Dropdown UI
         projectSelect.innerHTML = '';
         projects.forEach((project, index) => {
           const option = document.createElement('option');
@@ -504,12 +571,10 @@
         });
       }
       
-      // Reload the view with whichever data we have (Live or Fallback)
       showProject(0);
 
     } catch (error) {
       console.warn("GitHub fetch failed, keeping local items safe.", error);
-      // If fetching fails, we do nothing and just rely on the fallback list provided above!
     }
   }
 
@@ -537,7 +602,6 @@
     let sum = 0;
     if (project && Array.isArray(project.items)) {
       project.items.forEach(i => {
-        // Strip everything except numbers and decimals (works with $ or SGD)
         let numericValue = parseFloat(String(i.cost || 0).replace(/[^0-9.]/g, '')) || 0;
         sum += numericValue;
       });
@@ -570,7 +634,6 @@
   function renderTab(tab) {
     if (!currentProject) return;
 
-    // Update active tab button UI
     tabButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
 
     if (tab === 'about') {
@@ -627,19 +690,17 @@
       let imagesHtml = photos.filter(Boolean).map(photo => {
         let src = photo;
         if (!src.startsWith('http') && !src.startsWith('/')) src = '/' + src.replace(/^\/+/, '');
-        return `<img src="${src}" alt="Project Photo" style="max-width:100%; border:1px solid var(--border-glow); margin-top:10px;">`;
+        return `<img src="${src}" alt="Project Photo" style="max-width:100%; border:1px solid var(--cyan); margin-top:10px;">`;
       }).join('');
 
       screenBody.innerHTML = imagesHtml || "No valid photos found.";
     }
   }
 
-  // Handle dropdown change
   projectSelect.addEventListener('change', () => {
     showProject(Number(projectSelect.value));
   });
 
-  // Start initialization instantly with fallback data, then look for updates
   showProject(0);
   loadProjects();
 
