@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<!-- Strict mobile scaling to prevent the "zoomed out" bug -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <title>HaysX - Project Terminal</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
@@ -299,7 +298,7 @@
     line-height: 1.6;
   }
 
-  /* Item List formatting */
+  /* Item List formatting (Desktop) */
   .item-row {
     display: flex;
     justify-content: space-between;
@@ -309,37 +308,13 @@
     gap: 10px;
   }
 
-  .item-info {
-    flex: 1;
-  }
-
-  .item-name {
-    color: var(--white);
-    font-weight: 600;
-  }
-
-  .item-notes {
-    font-size: 11px;
-    color: var(--cyan);
-    opacity: 0.9;
-  }
-
-  .item-meta {
-    text-align: right;
-    white-space: nowrap;
-  }
-
-  .item-cost {
-    color: var(--cyan);
-    font-weight: 600;
-  }
-
-  .item-link {
-    display: block;
-    font-size: 10px;
-    color: var(--grey);
-    text-decoration: underline;
-  }
+  .item-info { flex: 1; }
+  .item-name { color: var(--white); font-weight: 600; }
+  .item-notes { font-size: 11px; color: var(--cyan); opacity: 0.9; margin-top: 2px; }
+  
+  .item-meta { text-align: right; white-space: nowrap; }
+  .item-cost { color: var(--cyan); font-weight: 600; }
+  .item-link { display: block; font-size: 10px; color: var(--grey); text-decoration: underline; margin-top: 4px; }
   .item-link:hover { color: var(--cyan); }
 
   /* Build Log Formatting */
@@ -373,45 +348,75 @@
      MOBILE RESPONSIVENESS (Phones & Small Tablets)
      ========================================================= */
   @media (max-width: 768px) {
+    /* Keep top nav horizontal but sleek */
     .topnav { 
-      padding: 15px; 
-      flex-direction: column; 
-      gap: 15px;
-      background: rgba(3, 5, 8, 0.9);
+      padding: 15px 20px; 
+      flex-direction: row; 
+      background: rgba(3, 5, 8, 0.95);
       border-bottom: 1px solid var(--cyan);
     }
-    .nav-logo { font-size: 18px; letter-spacing: 3px; }
-    .nav-links { gap: 20px; font-size: 11px; }
+    .nav-logo { font-size: 16px; letter-spacing: 3px; }
+    .nav-links { gap: 15px; font-size: 11px; }
 
-    /* Shrink bottom padding since logo is handled dynamically */
-    .terminal-container { padding: 110px 10px 20px 10px; }
+    /* Fix outer spacing */
+    .terminal-container { padding: 90px 15px 30px 15px; }
     
-    .page-title-row { flex-direction: column; align-items: flex-start; gap: 10px; }
-    .page-title { font-size: 24px; }
+    .telemetry-banner { font-size: 8px; margin-bottom: 15px; }
+
+    .page-title-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .page-title { font-size: 22px; }
+    .total-cost-badge { align-self: flex-start; font-size: 11px; padding: 4px 8px;}
     
-    .dashboard-panel { padding: 15px; border-width: 1px; }
+    .dashboard-panel { padding: 15px; border-radius: 6px; }
     
-    /* Stack tabs 2x2 grid on mobile for easy tapping */
-    .sub-tabs { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .sub-tabs { grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 15px; }
+    .tab-btn { font-size: 10px; padding: 12px 0; }
     
     .content-screen { padding: 15px; }
-    .item-name { font-size: 12px; }
-    .item-cost { font-size: 12px; }
 
-    /* Move logo entirely into the scroll flow, pushing it below the dashboard */
+    /* Fix Weird Wrapping in Status Header */
+    .screen-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      padding-bottom: 10px;
+    }
+    .screen-title { font-size: 14px; }
+    .screen-status { font-size: 9px; }
+
+    /* De-cramping the Items List for Mobile */
+    .item-row {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+      padding: 12px 0;
+    }
+    .item-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 243, 255, 0.05);
+      padding: 8px;
+      border-radius: 4px;
+      text-align: left;
+    }
+    .item-cost { font-size: 13px; }
+    .item-link { margin-top: 0; font-size: 11px; }
+
+    /* Move logo out of fixed corner into standard page flow */
     .brand-corner { 
       position: relative; 
       bottom: auto; 
       right: auto;
-      margin-top: 40px; 
-      margin-bottom: 30px;
+      margin-top: 30px; 
+      margin-bottom: 10px;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 100%;
     }
-    .wordmark { font-size: 24px; }
+    .wordmark { font-size: 22px; }
   }
 </style>
 </head>
@@ -441,7 +446,6 @@
       </div>
       <p class="page-desc">Everything here is a work in progress. Parts get logged as they arrive, and each build stays up as long as it's active.</p>
       
-      <!-- Theme Switcher -->
       <div class="theme-switcher">
         <span>THEME:</span>
         <div class="theme-btn" style="background: #00f3ff;" onclick="setTheme('#00f3ff')" title="Cyber Cyan"></div>
@@ -456,7 +460,7 @@
       <div class="selector-group">
         <label for="projectSelect">SELECT PROJECT:</label>
         <select id="projectSelect" class="cyber-select">
-          <option value="0">First CyberDeck (Local Data)</option>
+          <option value="0">Loading...</option>
         </select>
       </div>
 
@@ -539,6 +543,16 @@
   let currentProject = null;
   let currentTab = 'about';
 
+  function populateDropdown() {
+    projectSelect.innerHTML = '';
+    projects.forEach((project, index) => {
+      const option = document.createElement('option');
+      option.value = index;
+      option.textContent = project.title || "Unnamed Project";
+      projectSelect.appendChild(option);
+    });
+  }
+
   /* =========================================================
      LOAD PROJECTS DYNAMICALLY FROM GITHUB OVERRIDE
      ========================================================= */
@@ -562,13 +576,7 @@
         projects = fetchedProjects.filter(Boolean);
         projects.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
         
-        projectSelect.innerHTML = '';
-        projects.forEach((project, index) => {
-          const option = document.createElement('option');
-          option.value = index;
-          option.textContent = project.title || project.slug;
-          projectSelect.appendChild(option);
-        });
+        populateDropdown();
       }
       
       showProject(0);
@@ -701,6 +709,7 @@
     showProject(Number(projectSelect.value));
   });
 
+  populateDropdown();
   showProject(0);
   loadProjects();
 
