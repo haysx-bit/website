@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HaysX - Project Terminal</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
 <style>
   :root {
     --bg: #030508;
@@ -327,6 +330,16 @@
   }
   .item-link:hover { color: var(--cyan); }
 
+  /* Build Log Formatting */
+  .build-log-content img {
+    max-width: 100%;
+    margin-top: 15px;
+    border: 1px solid var(--border-glow);
+  }
+  .build-log-content p {
+    margin-bottom: 15px;
+  }
+
   /* HaysX Bottom Right Corner Widget */
   .brand-corner {
     position: fixed; bottom: 35px; right: 45px; z-index: 10; text-align: right; text-decoration: none; display: block;
@@ -361,7 +374,7 @@
     
     <div class="telemetry-banner">
       <span>SYS_ID: HAYSX_ARCHIVE</span>
-      <span>HOST: NETLIFY</span>
+      <span>HOST: GITHUB_API</span>
     </div>
 
     <div class="page-header">
@@ -376,25 +389,25 @@
       
       <div class="selector-group">
         <label for="projectSelect">SELECT PROJECT:</label>
-        <select id="projectSelect" class="cyber-select" onchange="switchProject()">
-          <option value="cyberdeck">First CyberDeck</option>
+        <select id="projectSelect" class="cyber-select">
+          <option value="0">First CyberDeck (Local Data)</option>
         </select>
       </div>
 
       <div class="sub-tabs">
-        <button class="tab-btn active" onclick="switchTab('about')">ABOUT</button>
-        <button class="tab-btn" onclick="switchTab('items')">ITEMS</button>
-        <button class="tab-btn" onclick="switchTab('log')">BUILD LOG</button>
-        <button class="tab-btn" onclick="switchTab('photos')">PHOTOS</button>
+        <button class="tab-btn active" data-tab="about">ABOUT</button>
+        <button class="tab-btn" data-tab="items">ITEMS</button>
+        <button class="tab-btn" data-tab="log">BUILD LOG</button>
+        <button class="tab-btn" data-tab="photos">PHOTOS</button>
       </div>
 
       <div class="content-screen" id="screenOutput">
         <div class="screen-header">
-          <span class="screen-title" id="screenTitle">First CyberDeck</span>
-          <span class="screen-status" id="screenStatus">STATUS // In Progress</span>
+          <span class="screen-title" id="screenTitle">Loading...</span>
+          <span class="screen-status" id="screenStatus">STATUS // Connecting...</span>
         </div>
         <div class="screen-body" id="screenBody">
-          This is my first ever DIY electronics project. A simple cyberdeck build. I wanted to create something unique and hands-on, and a cyberdeck felt like the perfect start. It’s a great way to learn the fundamentals of electronics, Linux, and hardware tinkering while building something cool and I'm also bored.
+          Loading project telemetry from secure repository...
         </div>
       </div>
 
@@ -408,10 +421,15 @@
   </a>
 
 <script>
-  const projectData = {
+  /* =========================================================
+     YOUR SAFE HARDCODED FALLBACK DATA
+     ========================================================= */
+  const fallbackProject = {
     title: "First CyberDeck",
     status: "In Progress",
+    slug: "first-cyberdeck",
     about: "This is my first ever DIY electronics project. A simple cyberdeck build. I wanted to create something unique and hands-on, and a cyberdeck felt like the perfect start. It’s a great way to learn the fundamentals of electronics, Linux, and hardware tinkering while building something cool and I'm also bored.",
+    build_log: "[2026-08] Initial layout planning and component fit-test.\n\n[2026-08] Power distribution and voltage regulation testing completed.\n\n[Pending] Enclosure cutting and structural assembly.",
     items: [
       { item: "Waterproof case", status_notes: "Purchased", cost: "SGD 48.49", link: "https://www.lazada.sg/products/i3334744880-s22328865357.html?urlFlag=true&mp=1" },
       { item: "Keyboard mechanical", status_notes: "Purchased", cost: "SGD 16.84", link: "https://www.lazada.sg/products/i13797127038-s124786135996.html?urlFlag=true&mp=1" },
@@ -436,72 +454,80 @@
     ]
   };
 
-  // Automatically calculate total cost regardless of whether cost strings use "$" or "SGD"
-  function calculateTotalCost() {
-    let sum = 0;
-    projectData.items.forEach(i => {
-      // Remove letters like "SGD" and symbols like "$", leaving just the number
-      let numericValue = parseFloat(i.cost.replace(/[^0-9.]/g, '')) || 0;
-      sum += numericValue;
-    });
-    document.getElementById('totalCostBadge').innerText = `TOTAL: SGD ${sum.toFixed(2)}`;
-  }
+  /* =========================================================
+     GITHUB API & STATE SETUP
+     ========================================================= */
+  const GITHUB_API = 'https://api.github.com/repos/haysx-bit/website/contents/projects?ref=main';
+  const projectSelect = document.getElementById('projectSelect');
+  const screenTitle = document.getElementById('screenTitle');
+  const screenStatus = document.getElementById('screenStatus');
+  const screenBody = document.getElementById('screenBody');
+  const tabButtons = document.querySelectorAll('.tab-btn');
 
-  function switchTab(tabName) {
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+  // Load the hardcoded items instantly so they are never "missing"
+  let projects = [fallbackProject];
+  let currentProject = null;
+  let currentTab = 'about';
 
-    const title = document.getElementById('screenTitle');
-    const status = document.getElementById('screenStatus');
-    const body = document.getElementById('screenBody');
-    
-    if (tabName === 'about') {
-      title.innerText = projectData.title;
-      status.innerText = "STATUS // " + projectData.status;
-      body.innerHTML = projectData.about;
-    } 
-    else if (tabName === 'items') {
-      title.innerText = "Bill of Materials (" + projectData.items.length + " Items)";
-      status.innerText = "STATUS // Sourced & Logged";
+  /* =========================================================
+     LOAD PROJECTS DYNAMICALLY FROM GITHUB OVERRIDE
+     ========================================================= */
+  async function loadProjects() {
+    try {
+      const response = await fetch(GITHUB_API);
+      if (!response.ok) throw new Error('Could not load projects from GitHub.');
       
-      let htmlList = '<div style="display: flex; flex-direction: column; gap: 4px;">';
-      projectData.items.forEach(i => {
-        htmlList += `
-          <div class="item-row">
-            <div class="item-info">
-              <div class="item-name">${i.item}</div>
-              <div class="item-notes">${i.status_notes}</div>
-            </div>
-            <div class="item-meta">
-              <div class="item-cost">${i.cost}</div>
-              ${i.link && i.link !== '#' ? `<a href="${i.link}" target="_blank" class="item-link">View Store →</a>` : ''}
-            </div>
-          </div>`;
-      });
-      htmlList += '</div>';
-      body.innerHTML = htmlList;
-    } 
-    else if (tabName === 'log') {
-      title.innerText = "Build Log Entries";
-      status.innerText = "STATUS // Active Logging";
-      body.innerHTML = "[2026-08] Initial layout planning and component fit-test.<br>[2026-08] Power distribution and voltage regulation testing completed.<br>[Pending] Enclosure cutting and structural assembly.";
-    } 
-    else if (tabName === 'photos') {
-      title.innerText = "Visual Blueprints";
-      status.innerText = "STATUS // Media Array Ready";
-      body.innerHTML = "[Assembly snapshots and wiring diagrams will load here from Netlify storage repository.]";
+      const files = await response.json();
+      const markdownFiles = files.filter(file => file.type === 'file' && file.name.toLowerCase().endsWith('.md'));
+
+      if (markdownFiles.length > 0) {
+        // Fetch all markdown files from Netlify CMS
+        const fetchedProjects = await Promise.all(
+          markdownFiles.map(async file => {
+            const res = await fetch(file.download_url);
+            const markdown = await res.text();
+            return parseProject(markdown, file.name);
+          })
+        );
+
+        // Replace the fallback data with the live fetched data
+        projects = fetchedProjects.filter(Boolean);
+        projects.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+        
+        // Update the Dropdown UI
+        projectSelect.innerHTML = '';
+        projects.forEach((project, index) => {
+          const option = document.createElement('option');
+          option.value = index;
+          option.textContent = project.title || project.slug;
+          projectSelect.appendChild(option);
+        });
+      }
+      
+      // Reload the view with whichever data we have (Live or Fallback)
+      showProject(0);
+
+    } catch (error) {
+      console.warn("GitHub fetch failed, keeping local items safe.", error);
+      // If fetching fails, we do nothing and just rely on the fallback list provided above!
     }
   }
 
-  function switchProject() {
-    switchTab('about');
+  /* =========================================================
+     PARSE CMS MARKDOWN
+     ========================================================= */
+  function parseProject(markdown, filename) {
+    const match = markdown.match(/^---\s*([\s\S]*?)\s*---\s*([\s\S]*)$/m);
+    if (!match) return null;
+
+    try {
+      const data = jsyaml.load(match[1]) || {};
+      const body = match[2].trim();
+      return { ...data, body, slug: filename.replace(/\.md$/i, '') };
+    } catch (error) {
+      console.error('Parse error:', filename, error);
+      return null;
+    }
   }
 
-  // Calculate and render cost on load
-  window.onload = function() {
-    calculateTotalCost();
-  };
-</script>
-
-</body>
-</html>
+  /* =================================
