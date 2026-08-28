@@ -2,1062 +2,506 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Projects — HAYSX</title>
-<meta name="description" content="HAYSX build log — projects, experiments and things being built.">
-
-<link rel="icon" href="logo.png">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Space+Grotesk:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="style.css">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HaysX - Project Terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-
-/* =========================================================
-   PROJECT PAGE
-   ========================================================= */
-
-.projects-shell {
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 70px 28px 100px;
-}
-
-.project-selector {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin: 45px 0 25px;
-  flex-wrap: wrap;
-}
-
-.project-selector label {
-  color: #00ffff;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 14px;
-  letter-spacing: 1px;
-}
-
-#projectSelect {
-  background: #080b0d;
-  color: #00ffff;
-  border: 1px solid #00ffff;
-  padding: 11px 40px 11px 14px;
-  border-radius: 5px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-#projectSelect:hover {
-  background: #101619;
-}
-
-/* =========================================================
-   TABS
-   ========================================================= */
-
-.project-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 20px 0 30px;
-  flex-wrap: wrap;
-}
-
-.tab-btn {
-  background: transparent;
-  color: #00ffff;
-  border: 1px solid #00ffff;
-  padding: 10px 18px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  transition: 0.2s ease;
-}
-
-.tab-btn:hover,
-.tab-btn.active {
-  background: #00ffff;
-  color: #050708;
-}
-
-/* =========================================================
-   CONTENT PANEL
-   ========================================================= */
-
-.tab-content {
-  background:
-    linear-gradient(
-      145deg,
-      rgba(15, 20, 23, 0.96),
-      rgba(5, 8, 10, 0.96)
-    );
-
-  border: 1px solid rgba(0, 255, 255, 0.65);
-  border-radius: 8px;
-
-  padding: 30px;
-
-  box-shadow:
-    0 0 30px rgba(0, 255, 255, 0.04),
-    inset 0 0 30px rgba(0, 255, 255, 0.015);
-
-  color: #c8d0d4;
-
-  min-height: 150px;
-}
-
-.tab-content h2,
-.tab-content h3 {
-  margin-top: 0;
-  color: #f0f4f5;
-  font-family: 'Orbitron', sans-serif;
-}
-
-.tab-content p {
-  line-height: 1.8;
-}
-
-/* =========================================================
-   ITEMS TABLE
-   ========================================================= */
-
-.items-table-wrapper {
-  width: 100%;
-  overflow-x: auto;
-}
-
-.items-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-}
-
-.items-table th {
-  text-align: left;
-  color: #00ffff;
-  font-weight: 500;
-  border-bottom: 1px solid rgba(0, 255, 255, 0.5);
-  padding: 13px 12px;
-  white-space: nowrap;
-}
-
-.items-table td {
-  padding: 14px 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  color: #c5cdd0;
-  vertical-align: top;
-}
-
-.items-table tr:hover td {
-  background: rgba(0,255,255,0.025);
-}
-
-.item-status {
-  color: #9aa7ad;
-}
-
-.item-cost {
-  white-space: nowrap;
-  color: #e7edef;
-}
-
-.item-link {
-  color: #00ffff;
-  text-decoration: none;
-}
-
-.item-link:hover {
-  text-decoration: underline;
-}
-
-/* =========================================================
-   BUILD LOG
-   ========================================================= */
-
-.build-log {
-  line-height: 1.8;
-}
-
-.build-log img {
-  display: block;
-  max-width: 100%;
-  max-height: 600px;
-  object-fit: contain;
-  margin: 25px auto 0;
-  border-radius: 6px;
-  border: 1px solid rgba(0,255,255,0.2);
-}
-
-/* =========================================================
-   PHOTOS
-   ========================================================= */
-
-.project-photos {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 15px;
-}
-
-.project-photos img {
-  width: 100%;
-  height: 230px;
-  object-fit: cover;
-  border-radius: 6px;
-  border: 1px solid rgba(0,255,255,0.25);
-}
-
-/* =========================================================
-   EMPTY / LOADING
-   ========================================================= */
-
-.project-message {
-  text-align: center;
-  padding: 60px 20px;
-  color: #7f8b91;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.project-error {
-  color: #ff6b6b;
-}
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 700px) {
-
-  .projects-shell {
-    padding: 45px 18px 80px;
+  :root {
+    --bg: #030508;
+    --cyan: #00f3ff;
+    --white: #ffffff;
+    --grey: #8a9bbd;
+    --dark-panel: rgba(4, 7, 12, 0.90);
+    --border-glow: rgba(0, 243, 255, 0.3);
   }
 
-  .tab-content {
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body, html {
+    width: 100%; min-height: 100%;
+    background-color: var(--bg);
+    font-family: 'JetBrains Mono', monospace;
+    -webkit-font-smoothing: antialiased;
+    color: var(--white);
+    color-scheme: dark;
+    overflow-x: hidden;
+  }
+
+  /* Sci-Fi CRT Vignette & Scanlines */
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: 100;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.25) 3px, rgba(0, 0, 0, 0.25) 4px);
+    pointer-events: none;
+  }
+  body::after {
+    content: ""; position: fixed; inset: 0; z-index: 99;
+    background: radial-gradient(circle at center, transparent 35%, rgba(0, 0, 0, 0.8) 100%);
+    pointer-events: none;
+  }
+
+  /* Workbench Grid */
+  .workbench-grid {
+    position: fixed; inset: 0;
+    background-image: 
+      linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Top Navigation */
+  .topnav {
+    position: absolute;
+    top: 0; left: 0; width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 40px;
+    z-index: 10;
+  }
+
+  .nav-logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 5px;
+    color: var(--white);
+    text-shadow: 0 0 10px var(--white), 0 0 20px var(--cyan), 0 0 40px var(--cyan), 0 0 70px var(--cyan);
+    text-decoration: none;
+    transition: text-shadow 0.2s;
+  }
+  .nav-logo:hover {
+    text-shadow: 0 0 15px var(--white), 0 0 30px var(--cyan), 0 0 60px var(--cyan), 0 0 90px var(--cyan);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+  }
+
+  .nav-links a {
+    color: var(--grey);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--cyan);
+    text-shadow: 0 0 12px var(--cyan);
+  }
+
+  /* Main Layout */
+  .terminal-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 110px 20px 80px 20px;
+    z-index: 2;
+  }
+
+  .telemetry-banner {
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    border-bottom: 1px solid rgba(0, 243, 255, 0.25);
+    padding-bottom: 6px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+    text-shadow: 0 0 8px var(--cyan);
+  }
+
+  .page-header {
+    width: 100%;
+    max-width: 680px;
+    margin-bottom: 25px;
+  }
+
+  .page-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 6px;
+  }
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-shadow: 0 0 12px rgba(255,255,255,0.3);
+  }
+
+  .page-title::before {
+    content: "■";
+    font-size: 14px;
+    color: var(--cyan);
+    text-shadow: 0 0 8px var(--cyan);
+  }
+
+  .total-cost-badge {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--cyan);
+    background: rgba(0, 243, 255, 0.08);
+    border: 1px solid rgba(0, 243, 255, 0.3);
+    padding: 4px 10px;
+    text-shadow: 0 0 8px var(--cyan);
+  }
+
+  .page-desc {
+    font-size: 13px;
+    color: var(--grey);
+    line-height: 1.5;
+  }
+
+  /* Control Panel Dashboard Box */
+  .dashboard-panel {
+    width: 100%;
+    max-width: 680px;
+    background: var(--dark-panel);
+    border: 1.5px solid var(--border-glow);
+    box-shadow: 0 0 80px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 243, 255, 0.15);
+    padding: 25px;
+    position: relative;
+    backdrop-filter: blur(12px);
+  }
+
+  .dashboard-panel::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100px; height: 2px;
+    background: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan);
+  }
+
+  .selector-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .selector-group label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    text-shadow: 0 0 8px var(--cyan);
+  }
+
+  .cyber-select {
+    background: #030406;
+    border: 1px solid rgba(0, 243, 255, 0.4);
+    color: var(--white);
+    padding: 10px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* Sub-Navigation Tabs */
+  .sub-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 25px;
+  }
+
+  .tab-btn {
+    background: rgba(0, 243, 255, 0.03);
+    border: 1px solid rgba(0, 243, 255, 0.25);
+    color: var(--grey);
+    padding: 10px 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn:hover, .tab-btn.active {
+    background: var(--cyan);
+    color: var(--bg);
+    border-color: var(--cyan);
+    font-weight: 800;
+    box-shadow: 0 0 15px var(--cyan);
+  }
+
+  /* Active Content Screen */
+  .content-screen {
+    background: #030406;
+    border: 1px solid rgba(138, 155, 189, 0.2);
     padding: 20px;
+    min-height: 180px;
+    max-height: 400px;
+    overflow-y: auto;
   }
 
-  .items-table {
-    min-width: 700px;
+  .screen-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    border-bottom: 1px dashed rgba(138, 155, 189, 0.3);
+    padding-bottom: 8px;
   }
 
-}
+  .screen-title {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--white);
+  }
 
+  .screen-status {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    text-shadow: 0 0 8px var(--cyan);
+  }
+
+  .screen-body {
+    font-size: 13px;
+    color: var(--grey);
+    line-height: 1.6;
+  }
+
+  /* Item List formatting */
+  .item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    gap: 10px;
+  }
+
+  .item-info {
+    flex: 1;
+  }
+
+  .item-name {
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .item-notes {
+    font-size: 11px;
+    color: var(--cyan);
+    opacity: 0.9;
+  }
+
+  .item-meta {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .item-cost {
+    color: var(--cyan);
+    font-weight: 600;
+  }
+
+  .item-link {
+    display: block;
+    font-size: 10px;
+    color: var(--grey);
+    text-decoration: underline;
+  }
+  .item-link:hover { color: var(--cyan); }
+
+  /* HaysX Bottom Right Corner Widget */
+  .brand-corner {
+    position: fixed; bottom: 35px; right: 45px; z-index: 10; text-align: right; text-decoration: none; display: block;
+  }
+  .wordmark {
+    font-size: 28px; font-weight: 800; letter-spacing: 4px; color: var(--white);
+    text-shadow: 0 0 15px var(--white), 0 0 30px var(--cyan), 0 0 55px var(--cyan), 0 0 80px var(--cyan);
+    transition: text-shadow 0.2s;
+  }
+  .wordmark:hover {
+    text-shadow: 0 0 20px var(--white), 0 0 40px var(--cyan), 0 0 70px var(--cyan), 0 0 100px var(--cyan);
+  }
+  .sub-tag {
+    font-size: 9px; font-weight: 600; letter-spacing: 2px; color: var(--cyan); opacity: 1;
+    text-shadow: 0 0 12px var(--cyan);
+  }
 </style>
 </head>
-
 <body>
 
-<canvas id="stars"></canvas>
+  <div class="workbench-grid"></div>
 
-<header>
-
-  <a href="index.html" class="brand">
-    <img src="logo.png" alt="HAYSX logo" class="logo">
-    <span class="brand-name">HAYSX</span>
-  </a>
-
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="projects.html" class="active">Projects</a></li>
-    </ul>
+  <nav class="topnav">
+    <a href="index.html" class="nav-logo">HAYSX</a>
+    <div class="nav-links">
+      <a href="index.html">HOME</a>
+      <a href="projects.html" class="active">PROJECTS</a>
+    </div>
   </nav>
 
-</header>
-
-
-<main>
-
-  <div class="projects-shell">
-
-    <div class="page-head">
-
-      <div class="eyebrow">BUILD LOG // PROJECTS</div>
-
-      <h1>Projects</h1>
-
-      <p>
-        Everything here is a work in progress.
-        Parts get logged as they arrive, and each build stays up as long as it's active.
-      </p>
-
+  <div class="terminal-container">
+    
+    <div class="telemetry-banner">
+      <span>SYS_ID: HAYSX_ARCHIVE</span>
+      <span>HOST: NETLIFY</span>
     </div>
 
-
-    <!-- PROJECT SELECTOR -->
-
-    <section class="project-selector" id="selectorArea">
-
-      <label for="projectSelect">
-        SELECT PROJECT:
-      </label>
-
-      <select id="projectSelect">
-        <option>Loading projects...</option>
-      </select>
-
-    </section>
-
-
-    <!-- TABS -->
-
-    <div class="project-tabs" id="tabs">
-
-      <button class="tab-btn active" data-tab="about">
-        ABOUT
-      </button>
-
-      <button class="tab-btn" data-tab="items">
-        ITEMS
-      </button>
-
-      <button class="tab-btn" data-tab="log">
-        BUILD LOG
-      </button>
-
-      <button class="tab-btn" data-tab="photos">
-        PHOTOS
-      </button>
-
+    <div class="page-header">
+      <div class="page-title-row">
+        <h1 class="page-title">Project Terminal</h1>
+        <div class="total-cost-badge" id="totalCostBadge">TOTAL: SGD 0.00</div>
+      </div>
+      <p class="page-desc">Everything here is a work in progress. Parts get logged as they arrive, and each build stays up as long as it's active.</p>
     </div>
 
-
-    <!-- CONTENT -->
-
-    <section id="projectContent">
-
-      <div class="project-message">
-        Loading projects...
+    <div class="dashboard-panel">
+      
+      <div class="selector-group">
+        <label for="projectSelect">SELECT PROJECT:</label>
+        <select id="projectSelect" class="cyber-select" onchange="switchProject()">
+          <option value="cyberdeck">First CyberDeck</option>
+        </select>
       </div>
 
-    </section>
+      <div class="sub-tabs">
+        <button class="tab-btn active" onclick="switchTab('about')">ABOUT</button>
+        <button class="tab-btn" onclick="switchTab('items')">ITEMS</button>
+        <button class="tab-btn" onclick="switchTab('log')">BUILD LOG</button>
+        <button class="tab-btn" onclick="switchTab('photos')">PHOTOS</button>
+      </div>
+
+      <div class="content-screen" id="screenOutput">
+        <div class="screen-header">
+          <span class="screen-title" id="screenTitle">First CyberDeck</span>
+          <span class="screen-status" id="screenStatus">STATUS // In Progress</span>
+        </div>
+        <div class="screen-body" id="screenBody">
+          This is my first ever DIY electronics project. A simple cyberdeck build. I wanted to create something unique and hands-on, and a cyberdeck felt like the perfect start. It’s a great way to learn the fundamentals of electronics, Linux, and hardware tinkering while building something cool and I'm also bored.
+        </div>
+      </div>
+
+    </div>
 
   </div>
 
-</main>
-
-
-<footer>
-
-  <span>
-    © <span id="year"></span> HAYSX
-  </span>
-
-  <span>
-    haysx.com
-  </span>
-
-</footer>
-
-
-<!-- YAML parser -->
-<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
-
-<!-- Markdown parser -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-<!-- HTML sanitizer -->
-<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
-
+  <a href="index.html" class="brand-corner">
+    <div class="wordmark">HaysX</div>
+    <div class="sub-tag">www.haysx.com</div>
+  </a>
 
 <script>
+  const projectData = {
+    title: "First CyberDeck",
+    status: "In Progress",
+    about: "This is my first ever DIY electronics project. A simple cyberdeck build. I wanted to create something unique and hands-on, and a cyberdeck felt like the perfect start. It’s a great way to learn the fundamentals of electronics, Linux, and hardware tinkering while building something cool and I'm also bored.",
+    items: [
+      { item: "Waterproof case", status_notes: "Purchased", cost: "SGD 48.49", link: "https://www.lazada.sg/products/i3334744880-s22328865357.html?urlFlag=true&mp=1" },
+      { item: "Keyboard mechanical", status_notes: "Purchased", cost: "SGD 16.84", link: "https://www.lazada.sg/products/i13797127038-s124786135996.html?urlFlag=true&mp=1" },
+      { item: "Orange Pi 4 Pro 6GB", status_notes: "Purchased", cost: "SGD 109.14", link: "https://www.aliexpress.com/item/1005010641470922.html" },
+      { item: "Wireless Trackball Mouse", status_notes: "Purchased", cost: "SGD 25.37", link: "https://www.aliexpress.com/item/1005005885600905.html" },
+      { item: "7 Inch LCD IPS Display HDMI Touch Screen", status_notes: "Purchased", cost: "SGD 50.73", link: "https://www.lazada.sg/products/i2966472979-s20396261329.html?urlFlag=true&mp=1" },
+      { item: "0.96 Inch OLED Display Module", status_notes: "Purchased", cost: "SGD 6.03", link: "https://www.lazada.sg/products/i13854772103-s124862156876.html?urlFlag=true&mp=1" },
+      { item: "Estardyn DS3231 RTC Module (Real Time Clock)", status_notes: "Purchased", cost: "SGD 5.72", link: "https://www.lazada.sg/products/i13854706662-s124853153454.html?urlFlag=true&mp=1" },
+      { item: "PAM8403 Audio Amplifier Board 2x5W Bluetooth 5.0", status_notes: "Purchased", cost: "SGD 2.32", link: "https://www.lazada.sg/products/i13884086132-s124890776697.html?urlFlag=true&mp=1" },
+      { item: "Small Full Range Audio Speaker Stereo", status_notes: "Purchased", cost: "SGD 4.29", link: "https://www.lazada.sg/products/i3463955217-s22963372666.html?urlFlag=true&mp=1" },
+      { item: "LED light Cooling fan + Bracket", status_notes: "Purchased", cost: "SGD 11.00", link: "https://www.lazada.sg/products/i13865429557-s124876906599.html?urlFlag=true&mp=1" },
+      { item: "Orange Pi Heatsink", status_notes: "Purchased", cost: "SGD 7.10", link: "https://www.aliexpress.com/item/1005009502708675.html" },
+      { item: "Mini Switches (Toggle ON-ON 3PIN + waterproof caps)", status_notes: "Purchased", cost: "SGD 6.00", link: "https://www.lazada.sg/products/i13650287179-s124189393073.html?urlFlag=true&mp=1" },
+      { item: "Metal Push Button Switch (12MM)", status_notes: "Purchased", cost: "SGD 30.00", link: "https://www.lazada.sg/products/i3551886859-s23453109074.html?urlFlag=true&mp=1" },
+      { item: "Guard Cover for Toggle Bat-Handle Switch", status_notes: "Purchased", cost: "SGD 2.00", link: "#" },
+      { item: "Female to Female M2 M2.5 brass standoffs", status_notes: "Purchased", cost: "SGD 6.00", link: "https://www.lazada.sg/products/i3593601505-s23711300998.html?urlFlag=true&mp=1" },
+      { item: "Soldering Iron Kit Welding Tool", status_notes: "Purchased", cost: "SGD 18.12", link: "https://www.lazada.sg/products/i3112244619-s21177654870.html?urlFlag=true&mp=1" },
+      { item: "Heat Shrink Tube with Heater (520 pcs)", status_notes: "Purchased", cost: "SGD 14.00", link: "https://www.lazada.sg/products/i13655092743-s124236309203.html?urlFlag=true&mp=1" },
+      { item: "Dupont line (40P Female to Female, 20cm)", status_notes: "Purchased", cost: "SGD 3.30", link: "https://www.lazada.sg/products/i2838242171-s19564701593.html?urlFlag=true&mp=1" },
+      { item: "Kapton Tape High Temperature Heat", status_notes: "Purchased", cost: "SGD 8.34", link: "https://www.lazada.sg/products/i13875695984-s124878947151.html?urlFlag=true&mp=1" },
+      { item: "SSD - KingSpec NE - 2280 256GB", status_notes: "Purchased", cost: "SGD 76.93", link: "https://www.aliexpress.com/item/4001315242309.html" }
+    ]
+  };
 
-/* =========================================================
-   BASIC SETTINGS
-   ========================================================= */
-
-const GITHUB_API =
-  'https://api.github.com/repos/haysx-bit/website/contents/projects?ref=main';
-
-const projectSelect =
-  document.getElementById('projectSelect');
-
-const projectContent =
-  document.getElementById('projectContent');
-
-const tabButtons =
-  document.querySelectorAll('.tab-btn');
-
-let projects = [];
-let currentProject = null;
-
-
-/* =========================================================
-   YEAR
-   ========================================================= */
-
-document.getElementById('year').textContent =
-  new Date().getFullYear();
-
-
-/* =========================================================
-   LOAD PROJECT FILES FROM GITHUB
-   ========================================================= */
-
-async function loadProjects() {
-
-  try {
-
-    const response = await fetch(GITHUB_API);
-
-    if (!response.ok) {
-      throw new Error('Could not load projects from GitHub.');
-    }
-
-    const files = await response.json();
-
-    const markdownFiles = files.filter(file =>
-      file.type === 'file' &&
-      file.name.toLowerCase().endsWith('.md')
-    );
-
-    if (!markdownFiles.length) {
-
-      projectSelect.innerHTML =
-        '<option>No projects published</option>';
-
-      projectContent.innerHTML = `
-        <div class="project-message">
-          No projects have been published yet.
-        </div>
-      `;
-
-      return;
-    }
-
-
-    /* Load every project */
-
-    projects = await Promise.all(
-
-      markdownFiles.map(async file => {
-
-        const response = await fetch(file.download_url);
-
-        const markdown = await response.text();
-
-        return parseProject(markdown, file.name);
-
-      })
-
-    );
-
-
-    /* Remove broken/empty entries */
-
-    projects = projects.filter(Boolean);
-
-
-    /* Sort alphabetically */
-
-    projects.sort((a, b) =>
-      (a.title || '').localeCompare(b.title || '')
-    );
-
-
-    /* Build dropdown */
-
-    projectSelect.innerHTML = '';
-
-    projects.forEach((project, index) => {
-
-      const option =
-        document.createElement('option');
-
-      option.value = index;
-
-      option.textContent =
-        project.title || project.slug;
-
-      projectSelect.appendChild(option);
-
+  // Automatically calculate total cost regardless of whether cost strings use "$" or "SGD"
+  function calculateTotalCost() {
+    let sum = 0;
+    projectData.items.forEach(i => {
+      // Remove letters like "SGD" and symbols like "$", leaving just the number
+      let numericValue = parseFloat(i.cost.replace(/[^0-9.]/g, '')) || 0;
+      sum += numericValue;
     });
-
-
-    /* Show first project */
-
-    showProject(0);
-
+    document.getElementById('totalCostBadge').innerText = `TOTAL: SGD ${sum.toFixed(2)}`;
   }
 
-  catch (error) {
-
-    console.error(error);
-
-    projectContent.innerHTML = `
-      <div class="project-message project-error">
-        Unable to load projects right now.
-      </div>
-    `;
-
-  }
-
-}
-
-
-/* =========================================================
-   PARSE DECАP MARKDOWN
-   ========================================================= */
-
-function parseProject(markdown, filename) {
-
-  const match = markdown.match(
-    /^---\s*([\s\S]*?)\s*---\s*([\s\S]*)$/m
-  );
-
-  if (!match) {
-    console.warn(
-      'Skipping file without front matter:',
-      filename
-    );
-
-    return null;
-  }
-
-  try {
-
-    const data =
-      jsyaml.load(match[1]) || {};
-
-    const body =
-      match[2].trim();
-
-    return {
-
-      ...data,
-
-      body,
-
-      slug:
-        filename.replace(/\.md$/i, '')
-
-    };
-
-  }
-
-  catch (error) {
-
-    console.error(
-      'Could not parse:',
-      filename,
-      error
-    );
-
-    return null;
-
-  }
-
-}
-
-
-/* =========================================================
-   SHOW PROJECT
-   ========================================================= */
-
-function showProject(index) {
-
-  currentProject =
-    projects[index];
-
-  if (!currentProject) {
-    return;
-  }
-
-  projectSelect.value = index;
-
-  renderTab('about');
-
-}
-
-
-/* =========================================================
-   TAB BUTTONS
-   ========================================================= */
-
-tabButtons.forEach(button => {
-
-  button.addEventListener('click', () => {
-
-    const tab =
-      button.dataset.tab;
-
-    renderTab(tab);
-
-  });
-
-});
-
-
-/* =========================================================
-   TAB RENDERING
-   ========================================================= */
-
-function renderTab(tab) {
-
-  if (!currentProject) {
-    return;
-  }
-
-
-  tabButtons.forEach(button => {
-
-    button.classList.toggle(
-      'active',
-      button.dataset.tab === tab
-    );
-
-  });
-
-
-  if (tab === 'about') {
-
-    renderAbout();
-
-  }
-
-  else if (tab === 'items') {
-
-    renderItems();
-
-  }
-
-  else if (tab === 'log') {
-
-    renderBuildLog();
-
-  }
-
-  else if (tab === 'photos') {
-
-    renderPhotos();
-
-  }
-
-}
-
-
-/* =========================================================
-   ABOUT
-   ========================================================= */
-
-function renderAbout() {
-
-  const title =
-    escapeHTML(
-      currentProject.title || 'Project'
-    );
-
-  const status =
-    currentProject.status
-      ? `
-        <div style="
-          margin-bottom:20px;
-          color:#00ffff;
-          font-family:'JetBrains Mono',monospace;
-          font-size:12px;
-          letter-spacing:1px;
-        ">
-          STATUS // ${escapeHTML(currentProject.status)}
-        </div>
-      `
-      : '';
-
-
-  const about =
-    currentProject.about ||
-    'No project description has been added yet.';
-
-
-  projectContent.innerHTML = `
-
-    <div class="tab-content">
-
-      <h3>
-        ${title}
-      </h3>
-
-      ${status}
-
-      <div>
-        ${escapeHTML(about).replace(/\n/g, '<br>')}
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================================================
-   ITEMS TABLE
-   ========================================================= */
-
-function renderItems() {
-
-  const items =
-    Array.isArray(currentProject.items)
-      ? currentProject.items
-      : [];
-
-
-  if (!items.length) {
-
-    projectContent.innerHTML = `
-
-      <div class="tab-content">
-
-        <h3>Items</h3>
-
-        <div class="project-message">
-          No items have been added yet.
-        </div>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  const rows =
-    items.map(item => {
-
-      const section =
-        escapeHTML(item.section || '—');
-
-      const name =
-        escapeHTML(item.item || '—');
-
-      const status =
-        escapeHTML(item.status_notes || '—');
-
-      const cost =
-        escapeHTML(item.cost || '—');
-
-      const link =
-        item.link
-          ? `
-            <a
-              class="item-link"
-              href="${safeURL(item.link)}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              VIEW ↗
-            </a>
-          `
-          : '—';
-
-
-      return `
-
-        <tr>
-
-          <td>${section}</td>
-
-          <td>${name}</td>
-
-          <td class="item-status">
-            ${status}
-          </td>
-
-          <td class="item-cost">
-            ${cost}
-          </td>
-
-          <td>
-            ${link}
-          </td>
-
-        </tr>
-
-      `;
-
-    }).join('');
-
-
-  projectContent.innerHTML = `
-
-    <div class="tab-content">
-
-      <h3>Items</h3>
-
-      <div class="items-table-wrapper">
-
-        <table class="items-table">
-
-          <thead>
-
-            <tr>
-
-              <th>Section</th>
-
-              <th>Item</th>
-
-              <th>Status / Notes</th>
-
-              <th>Cost (SGD)</th>
-
-              <th>Link</th>
-
-            </tr>
-
-          </thead>
-
-          <tbody>
-
-            ${rows}
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================================================
-   BUILD LOG
-   ========================================================= */
-
-function renderBuildLog() {
-
-  const buildLog =
-    currentProject.build_log ||
-    'No build log has been added yet.';
-
-
-  const html =
-    DOMPurify.sanitize(
-      marked.parse(buildLog)
-    );
-
-
-  projectContent.innerHTML = `
-
-    <div class="tab-content build-log">
-
-      <h3>Build Log</h3>
-
-      ${html}
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================================================
-   PHOTOS
-   ========================================================= */
-
-function renderPhotos() {
-
-  let photos =
-    currentProject.photos;
-
-
-  if (!photos) {
-
-    projectContent.innerHTML = `
-
-      <div class="tab-content">
-
-        <h3>Photos</h3>
-
-        <div class="project-message">
-          No photos have been added yet.
-        </div>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  /*
-    Depending on the CMS configuration,
-    photos may be a single path or an array.
-  */
-
-  if (!Array.isArray(photos)) {
-    photos = [photos];
-  }
-
-
-  const images =
-    photos
-      .filter(Boolean)
-      .map(photo => {
-
-        const src =
-          normaliseImagePath(photo);
-
-        return `
-
-          <img
-            src="${safeURL(src)}"
-            alt="${escapeHTML(currentProject.title || 'Project photo')}"
-            loading="lazy"
-          >
-
-        `;
-
-      })
-      .join('');
-
-
-  if (!images) {
-
-    projectContent.innerHTML = `
-
-      <div class="tab-content">
-
-        <h3>Photos</h3>
-
-        <div class="project-message">
-          No photos have been added yet.
-        </div>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  projectContent.innerHTML = `
-
-    <div class="tab-content">
-
-      <h3>Photos</h3>
-
-      <div class="project-photos">
-
-        ${images}
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================================================
-   IMAGE PATH
-   ========================================================= */
-
-function normaliseImagePath(path) {
-
-  if (!path) {
-    return '';
-  }
-
-  if (
-    path.startsWith('http://') ||
-    path.startsWith('https://') ||
-    path.startsWith('/')
-  ) {
-    return path;
-  }
-
-  return '/' + path.replace(/^\/+/, '');
-
-}
-
-
-/* =========================================================
-   BASIC SECURITY HELPERS
-   ========================================================= */
-
-function escapeHTML(value) {
-
-  return String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-
-}
-
-
-function safeURL(value) {
-
-  try {
-
-    const url =
-      new URL(value, window.location.origin);
-
-    if (
-      url.protocol === 'http:' ||
-      url.protocol === 'https:'
-    ) {
-
-      return url.href;
-
+  function switchTab(tabName) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    const title = document.getElementById('screenTitle');
+    const status = document.getElementById('screenStatus');
+    const body = document.getElementById('screenBody');
+    
+    if (tabName === 'about') {
+      title.innerText = projectData.title;
+      status.innerText = "STATUS // " + projectData.status;
+      body.innerHTML = projectData.about;
+    } 
+    else if (tabName === 'items') {
+      title.innerText = "Bill of Materials (" + projectData.items.length + " Items)";
+      status.innerText = "STATUS // Sourced & Logged";
+      
+      let htmlList = '<div style="display: flex; flex-direction: column; gap: 4px;">';
+      projectData.items.forEach(i => {
+        htmlList += `
+          <div class="item-row">
+            <div class="item-info">
+              <div class="item-name">${i.item}</div>
+              <div class="item-notes">${i.status_notes}</div>
+            </div>
+            <div class="item-meta">
+              <div class="item-cost">${i.cost}</div>
+              ${i.link && i.link !== '#' ? `<a href="${i.link}" target="_blank" class="item-link">View Store →</a>` : ''}
+            </div>
+          </div>`;
+      });
+      htmlList += '</div>';
+      body.innerHTML = htmlList;
+    } 
+    else if (tabName === 'log') {
+      title.innerText = "Build Log Entries";
+      status.innerText = "STATUS // Active Logging";
+      body.innerHTML = "[2026-08] Initial layout planning and component fit-test.<br>[2026-08] Power distribution and voltage regulation testing completed.<br>[Pending] Enclosure cutting and structural assembly.";
+    } 
+    else if (tabName === 'photos') {
+      title.innerText = "Visual Blueprints";
+      status.innerText = "STATUS // Media Array Ready";
+      body.innerHTML = "[Assembly snapshots and wiring diagrams will load here from Netlify storage repository.]";
     }
-
   }
 
-  catch (error) {}
-
-  return '#';
-
-}
-
-
-/* =========================================================
-   PROJECT CHANGE
-   ========================================================= */
-
-projectSelect.addEventListener(
-  'change',
-  () => {
-
-    const index =
-      Number(projectSelect.value);
-
-    showProject(index);
-
+  function switchProject() {
+    switchTab('about');
   }
-);
 
-
-/* =========================================================
-   START
-   ========================================================= */
-
-loadProjects();
-
+  // Calculate and render cost on load
+  window.onload = function() {
+    calculateTotalCost();
+  };
 </script>
-
-<script src="site.js"></script>
 
 </body>
 </html>
