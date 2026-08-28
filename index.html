@@ -25,9 +25,12 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body, html {
-    width: 100%; height: 100%;
+    width: 100%; 
+    min-height: 100vh;
     background-color: var(--bg);
-    overflow: hidden;
+    /* Unlocked scrolling for mobile */
+    overflow-x: hidden;
+    overflow-y: auto; 
     font-family: 'JetBrains Mono', monospace;
     color: var(--white);
     color-scheme: dark;
@@ -73,15 +76,19 @@
 
   /* Hero Layout */
   .hero {
-    position: relative; width: 100%; height: 100vh;
+    position: relative; width: 100%; 
+    min-height: 100vh;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 40px 20px; z-index: 2;
+    padding: 120px 20px 80px 20px; /* Adjusted padding to allow scrolling breathing room */
+    z-index: 2;
   }
 
   .hero-content {
     display: flex; flex-direction: column; align-items: center; text-align: center;
     background: rgba(4, 7, 12, 0.90);
     padding: 30px 40px;
+    width: 100%;
+    max-width: 650px;
     backdrop-filter: blur(12px);
     border: 1.5px solid rgba(0, 243, 255, 0.3);
     box-shadow: 0 0 80px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 243, 255, 0.15);
@@ -100,7 +107,9 @@
   /* Holographic Scanner Stage */
   .stage {
     position: relative;
-    width: 420px; height: 210px;
+    width: 100%; 
+    max-width: 420px; /* Made max-width instead of fixed width */
+    min-height: 210px;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     margin-bottom: 25px;
     border: 2px solid var(--accent);
@@ -148,6 +157,7 @@
     display: flex; justify-content: space-between;
     font-size: 9px; color: var(--grey); border-top: 1px dashed rgba(255,255,255,0.25);
     padding-top: 8px; margin-top: 5px; letter-spacing: 1px;
+    width: 100%;
   }
 
   .section-tag { font-size: 10px; font-weight: 600; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; text-shadow: 0 0 10px var(--accent); }
@@ -203,6 +213,51 @@
   .sub-tag {
     font-size: 9px; font-weight: 600; letter-spacing: 2px; color: var(--accent); opacity: 1;
     text-shadow: 0 0 12px var(--accent);
+  }
+
+  /* =========================================================
+     MOBILE RESPONSIVENESS (Phones & Small Tablets)
+     ========================================================= */
+  @media (max-width: 650px) {
+    .topnav { 
+      padding: 15px 20px; 
+    }
+    .nav-logo { 
+      font-size: 18px; 
+      letter-spacing: 3px; 
+    }
+    .nav-links { 
+      gap: 15px; 
+      font-size: 11px; 
+    }
+    
+    .hero-content { 
+      padding: 25px 15px; 
+    }
+    .logo-main { 
+      font-size: 32px; 
+      letter-spacing: 4px; 
+    }
+    .telemetry-feed { 
+      flex-direction: column; 
+      gap: 6px; 
+      align-items: center; 
+    }
+    .headline { 
+      font-size: 22px; 
+    }
+    
+    .brand-corner { 
+      bottom: 15px; 
+      right: 20px; 
+    }
+    .wordmark { 
+      font-size: 20px; 
+    }
+    .cyber-btn {
+      width: 100%;
+      justify-content: center;
+    }
   }
 </style>
 </head>
@@ -297,11 +352,13 @@
   let mouse = { x: -1000, y: -1000 };
   let scrollOffset = 0;
 
+  // Track cursor on desktop, ignore on mobile touch
   window.addEventListener('mousemove', (e) => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
   });
 
+  // Makes the PCB background react when you actually scroll now!
   window.addEventListener('scroll', () => {
     scrollOffset = window.scrollY * 0.3;
   });
@@ -313,12 +370,10 @@
     pcbTraces = [];
     pcbNodes = [];
 
-    let cx = width / 2;
-    let cy = height / 2;
-    let safeW = 860;
-    let safeH = 600;
+    // Increase density based on width for mobile vs desktop
+    let density = width < 650 ? 20 : 45;
 
-    for (let i = 0; i < 45; i++) {
+    for (let i = 0; i < density; i++) {
       let startX = Math.random() * width;
       let startY = Math.random() * (height + 300);
 
@@ -352,12 +407,13 @@
     ctx.save();
     ctx.translate(0, -scrollOffset % height);
 
+    // Dynamic safe zone based on screen width
     let cx = width / 2;
     let cy = height / 2;
-    let safeW = 860;
-    let safeH = 600;
+    let safeW = width < 650 ? 350 : 860;
+    let safeH = width < 650 ? 500 : 600;
 
-    // 1. Draw Dense Right-Angle Circuit Traces with enhanced visibility
+    // 1. Draw Dense Right-Angle Circuit Traces
     pcbTraces.forEach(path => {
       ctx.beginPath();
       ctx.moveTo(path[0].x, path[0].y);
@@ -392,7 +448,7 @@
       ctx.shadowBlur = 0;
     });
 
-    // 2. Draw Circuit Solder Vias / Connection Pads that pop brightly
+    // 2. Draw Circuit Solder Vias / Connection Pads
     pcbNodes.forEach(node => {
       let inCenter = Math.abs(node.x - cx) < safeW/2 && Math.abs(node.y - (cy + scrollOffset%height)) < safeH/2;
       if (inCenter) return;
