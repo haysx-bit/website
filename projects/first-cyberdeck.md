@@ -14,7 +14,7 @@ items:
     link: https://www.lazada.sg/products/i3334744880-s22328865357.html?urlFlag=true&mp=1
   - section: Cyberdeck
     item: Keyboard mechanical
-    status_notes: "Pending "
+    status_notes: Purchased
     cost: SGD 16.84
     link: https://www.lazada.sg/products/i13797127038-s124786135996.html?urlFlag=true&mp=1&tradePath=omItm&tradeOrderId=171925951292205&tradeOrderLineId=171925951392205&spm=spm%3Da2o42.order_details.item_title.1
   - cost: SGD 109.14
@@ -109,6 +109,6 @@ items:
     cost: SGD 76.93
     link: https://www.aliexpress.com/item/4001315242309.html?spm=a2g0o.order_list.order_list_main.5.1d501802nIav4c
 build_log: |-
-  28 Aug 2026
-  Waiting for items to arrive still
+  **28 Aug 2026**
+  `Waiting for items to arrive`
 ---
