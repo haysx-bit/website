@@ -17,7 +17,7 @@ items:
     status_notes: "Pending "
     cost: SGD 16.84
     link: https://www.lazada.sg/products/i13797127038-s124786135996.html?urlFlag=true&mp=1&tradePath=omItm&tradeOrderId=171925951292205&tradeOrderLineId=171925951392205&spm=spm%3Da2o42.order_details.item_title.1
-  - cost: "109.14"
+  - cost: SGD 109.14
     link: https://www.aliexpress.com/item/1005010641470922.html?spm=a2g0o.detail.similar_items.2.65c4iDpZiDpZhw&utparam-url=scene%3Aimage_search%7Cquery_from%3Adetail_bigimg%7Cx_object_id%3A1005010641470922%7C_p_origin_prod%3A&algo_pvid=683be108-d99b-4033-8a11-10cd1f29d93b&algo_exp_id=683be108-d99b-4033-8a11-10cd1f29d93b&pdp_ext_f=%7B%22order%22%3A%22450%22%2C%22spu_best_type%22%3A%22price%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21SGD%2190.40%2190.40%21%21%2169.01%2169.01%21%40210159d417872359767592935e0f68%2112000053058704041%21sea%21SG%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3Ad52092ff%3Bm03_new_user%3A-29895#nav-description
     section: Cyberdeck
     item: "Orange Pi 4 Pro 6GB "
@@ -108,4 +108,7 @@ items:
     status_notes: "Purchased "
     cost: SGD 76.93
     link: https://www.aliexpress.com/item/4001315242309.html?spm=a2g0o.order_list.order_list_main.5.1d501802nIav4c
+build_log: |-
+  28 Aug 2026
+  Waiting for items to arrive still
 ---
