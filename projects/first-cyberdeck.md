@@ -10,7 +10,7 @@ items:
   - section: Cyberdeck
     item: Waterproof case
     status_notes: Purchased
-    cost: SGD 48.49
+    cost: SGD 20
     link: https://www.lazada.sg/products/i3334744880-s22328865357.html?urlFlag=true&mp=1
   - section: Cyberdeck
     item: Keyboard mechanical
