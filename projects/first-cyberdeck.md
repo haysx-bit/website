@@ -127,7 +127,7 @@ build_log: >-
   ![](/images/cyber-deck-all-itemss.jpeg)
 
 
-  To set started: Next step is setting up the OS. Downloading Armbian XFCE for the Orange Pi from [armbian.com](https://www.google.com/search?q=https://www.armbian.com/orangepi4) and flashing it to the 32GB SanDisk MicroSD using Raspberry Pi Imager from [raspberrypi.com/software](https://www.raspberrypi.com/software). Once flashed, will bench test the board with the 7-inch LCD, plug in the KingSpec NVMe SSD, and run initial boot setup.
+  Next step is setting up the OS. Downloading the official Debian Desktop image (v1.1.0) for the Orange Pi 4 Pro from [orangepi.org](http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/service-and-support/Orange-Pi-4-Pro.html) and flashing it to the 32GB SanDisk MicroSD using Raspberry Pi Imager from [raspberrypi.com/software](https://www.raspberrypi.com/software). Once flashed, will bench test the board with the 7-inch LCD, seat the KingSpec NVMe SSD, and run initial boot setup.
 
 
   ![Flashing the base OS to the MicroSD card to post the board and migrate storage to the KingSpec NVMe SSD.](/images/sd.jpeg)
