@@ -147,4 +147,12 @@ build_log: >-
 
 
   ![](/images/summary-raspberry-pi-imager.png)
+
+
+  \
+
+  Hit a roadblock today trying to flash Debian onto a 32GB SanDisk Ultra for my Orange Pi 4 Pro. Raspberry Pi Imager kept failing with write errors, so I switched to Rufus Portable and ran it as administrator, but that threw an immediate "Write error" too.
+
+
+  After trying different USB ports, cleaning the contacts, and ruling out Windows permissions, I tried running `clean` via Diskpart and formatting with the official SD Card Formatter. Both tools hung indefinitely and threw an "I/O device error." Unplugging the reader instantly unfroze Windows, confirming a hardware bus hang—the card's internal flash controller failed and permanently locked itself into read-only mode. Seems like to get a new SD card
 ---
