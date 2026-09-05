@@ -109,6 +109,10 @@ items:
     cost: SGD 76.93
     link: https://www.aliexpress.com/item/4001315242309.html?spm=a2g0o.order_list.order_list_main.5.1d501802nIav4c
 build_log: >-
+  \
+
+  \
+
   For my build. I will be using Gemini AI to help me with everything. \
 
   \
@@ -131,4 +135,7 @@ build_log: >-
 
 
   ![Flashing the base OS to the MicroSD card to post the board and migrate storage to the KingSpec NVMe SSD.](/images/sd.jpeg)
+
+
+  Once the download from Google Drive finishes, extract the `.7z` file using 7-Zip to reveal the raw `.img` file. Open Raspberry Pi Imager, choose "No filtering" under Device, then head to OS, scroll to the bottom, and click "Use custom" to select your extracted `.img` file. Under Storage, choose the 32GB SanDisk MicroSD card inside the Ugreen reader. Click Next, select "No" when prompted for OS customization settings, and confirm the write to flash and verify the card.
 ---
