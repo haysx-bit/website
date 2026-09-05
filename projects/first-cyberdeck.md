@@ -108,7 +108,27 @@ items:
     status_notes: "Purchased "
     cost: SGD 76.93
     link: https://www.aliexpress.com/item/4001315242309.html?spm=a2g0o.order_list.order_list_main.5.1d501802nIav4c
-build_log: |-
-  **28 Aug 2026**
-  `Waiting for items to arrive`
+build_log: >-
+  For my build. I will be using Gemini AI to help me with everything. \
+
+  \
+
+  **8 Aug 2026**
+
+  Waiting for items to arrive
+
+
+  **5 Sep 2026**
+
+
+  All item arrived, keyboard is too big, so purchased the mini keyboard with touch pad 
+
+
+  ![](/images/cyber-deck-all-itemss.jpeg)
+
+
+  To set started: Next step is setting up the OS. Downloading Armbian XFCE for the Orange Pi from [armbian.com](https://www.google.com/search?q=https://www.armbian.com/orangepi4) and flashing it to the 32GB SanDisk MicroSD using Raspberry Pi Imager from [raspberrypi.com/software](https://www.raspberrypi.com/software). Once flashed, will bench test the board with the 7-inch LCD, plug in the KingSpec NVMe SSD, and run initial boot setup.
+
+
+  ![Flashing the base OS to the MicroSD card to post the board and migrate storage to the KingSpec NVMe SSD.](/images/sd.jpeg)
 ---
